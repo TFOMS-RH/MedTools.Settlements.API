@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="MedTools.Settlements.API/MedTools.Settlements.API.csproj" />
+  <Project Path="MedTools.Settlements.Application/MedTools.Settlements.Application.csproj" />
+  <Project Path="MedTools.Settlements.Domain/MedTools.Settlements.Domain.csproj" />
+  <Project Path="MedTools.Settlements.Infrastructure/MedTools.Settlements.Infrastructure.csproj" />
+</Solution>
