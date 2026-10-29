@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct.Models;
 
-namespace MedTools.Settlements.Infrastructure.Database.Entities.Reports.OutgoingReconciliationAct.Configuration;
+namespace MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct.Configuration;
 
 public sealed class ReconciliationActDbEntityConfiguration : IEntityTypeConfiguration<ReconciliationAct>
 {

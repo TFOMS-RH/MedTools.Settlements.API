@@ -21,8 +21,6 @@
 		<Content Include="Common\Schemas\*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-		<Folder Include="Database\Entities\Registers\" />
-		<Folder Include="Database\Repositories\" />
 	</ItemGroup>
 
 </Project>

@@ -1,10 +1,11 @@
 ﻿using MedTools.Settlements.Domain.Enums;
+using MedTools.Settlements.Application.Models.Results;
 
 namespace MedTools.Settlements.Application.Services;
 
-public interface IXmlValidationService
+public interface IXmlValidationService<T> where T : class
 {
-    public List<string> Validate(
-        Stream fileStream, 
+    public XmlValidationResult<T> Validate(
+        Stream fileStream,
         XmlFormat format);
 }

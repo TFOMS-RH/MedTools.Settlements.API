@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using MedTools.Settlements.Infrastructure.Database.Entities.Acts.IncomingReconciliationAct.Models;
 
-namespace MedTools.Settlements.Infrastructure.Database.Entities.Reports.IncomingReconciliationAct.Configuration;
+namespace MedTools.Settlements.Infrastructure.Database.Entities.Acts.IncomingReconciliationAct.Configuration;
 
 public sealed class ReconciliationActDbEntityConfiguration : IEntityTypeConfiguration<ReconciliationAct>
 {
