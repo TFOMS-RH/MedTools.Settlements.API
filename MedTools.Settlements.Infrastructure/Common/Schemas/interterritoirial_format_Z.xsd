@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:element name="ZL_LIST">
+        <xs:annotation>
+            <xs:documentation>Акт расхождений</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ZGLV" type="ZglvType">
+                    <xs:annotation>
+                        <xs:documentation>Заголовок файла</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="ACT" type="ActType">
+                    <xs:annotation>
+                        <xs:documentation>Акт</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="ZAP" type="ZapType" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>Записи</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="ZapNZap">
+            <xs:selector xpath="ZAP"/>
+            <xs:field xpath="N_ZAP"/>
+        </xs:unique>
+    </xs:element>
+    <xs:complexType name="ZglvType">
+        <xs:sequence>
+            <xs:element name="VERSION">
+                <xs:annotation>
+                    <xs:documentation>Версия взаимодействия</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                        <xs:maxLength value="5"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="DATA" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation>Дата</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="FILENAME">
+                <xs:annotation>
+                    <xs:documentation>Имя файла</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                        <xs:maxLength value="10"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="FILENAME_S">
+                <xs:annotation>
+                    <xs:documentation>Имя файла акта сверки</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                        <xs:maxLength value="26"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ActType">
+        <xs:sequence>
+            <xs:element name="YEAR">
+                <xs:annotation>
+                    <xs:documentation>Отчетный год</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="omsInteger">
+                        <xs:pattern value="[1-9]\d{3}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="QR">
+                <xs:annotation>
+                    <xs:documentation>Отчетный квартал</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="omsInteger">
+                        <xs:pattern value="[1-4]"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="N_ACT">
+                <xs:annotation>
+                    <xs:documentation>Номер акта</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                        <xs:maxLength value="15"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="D_ACT" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation>Дата акта</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="C_OKATO1">
+                <xs:annotation>
+                    <xs:documentation>Код ОКАТО территории по месту оказания медицинской помощи</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="OKATO_OMS">
+                <xs:annotation>
+                    <xs:documentation>Код ОКАТО территории по месту выдачи полиса ОМС</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ZapType">
+        <xs:sequence>
+            <xs:element name="N_ZAP">
+                <xs:annotation>
+                    <xs:documentation>Номер позиции записи</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="omsInteger">
+                        <xs:pattern value="[1-9]\d{0,7}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="RASSCHET" type="RasschetType">
+                <xs:annotation>
+                    <xs:documentation>Сведения о расчетах по счетам</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RasschetType">
+        <xs:sequence>
+            <xs:element name="NSCHET">
+                <xs:annotation>
+                    <xs:documentation>Номер счета</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="1"/>
+                        <xs:maxLength value="15"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="DSCHET" type="xs:date">
+                <xs:annotation>
+                    <xs:documentation>Дата выставления счета</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SCHET_OB">
+                <xs:annotation>
+                    <xs:documentation>Сальдо на начало отчетного периода</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="17"/>
+                        <xs:fractionDigits value="2"/>
+                        <xs:pattern value="\d{1,15}\.\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SUMMAP">
+                <xs:annotation>
+                    <xs:documentation>
+                        Сумма счета по оплате медицинской помощи, предъявленная к возмещению
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="17"/>
+                        <xs:fractionDigits value="2"/>
+                        <xs:pattern value="\d{1,15}\.\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SUMMAREC">
+                <xs:annotation>
+                    <xs:documentation>
+                        Сумма выставленных уведомлений о восстановлении средств, ранее взысканных с медицинской
+                        организации, по счету
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="17"/>
+                        <xs:fractionDigits value="2"/>
+                        <xs:pattern value="[\-+]?\d{1,15}\.\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SUMMARET">
+                <xs:annotation>
+                    <xs:documentation>
+                        Сумма выставленных уведомлений о возврате средств, оплаченных по счету
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="17"/>
+                        <xs:fractionDigits value="2"/>
+                        <xs:pattern value="[\-+]?\d{1,15}\.\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SUMMA1">
+                <xs:annotation>
+                    <xs:documentation>
+                        Сумма средств, перечисленных ТФОМС по месту страхования ? ТФОМС по месту оказания помощи
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="17"/>
+                        <xs:fractionDigits value="2"/>
+                        <xs:pattern value="[\-+]?\d{1,15}\.\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SUMMA2">
+                <xs:annotation>
+                    <xs:documentation>
+                        Сумма средств, перечисленных ТФОМС по месту оказания помощи ? ТФОМС по месту страхования
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="17"/>
+                        <xs:fractionDigits value="2"/>
+                        <xs:pattern value="[\-+]?\d{1,15}\.\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SCHET_CB">
+                <xs:annotation>
+                    <xs:documentation>Сальдо на конец отчетного периода</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="17"/>
+                        <xs:fractionDigits value="2"/>
+                        <xs:pattern value="\d{1,15}\.\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="omsInteger">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[\-+]?[0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

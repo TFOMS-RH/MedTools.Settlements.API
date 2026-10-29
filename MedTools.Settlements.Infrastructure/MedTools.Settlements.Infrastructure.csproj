@@ -17,4 +17,12 @@
 		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="Common\Schemas\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Folder Include="Database\Entities\Registers\" />
+		<Folder Include="Database\Repositories\" />
+	</ItemGroup>
+
 </Project>
