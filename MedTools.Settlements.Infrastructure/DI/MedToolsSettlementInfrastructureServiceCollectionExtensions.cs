@@ -3,11 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using MedTools.Settlements.Application.Services;
+using MedTools.Settlements.Infrastructure.Services;
 using MedTools.Settlements.Infrastructure.Common.Options;
 using MedTools.Settlements.Infrastructure.Database.Contexts;
+using MedTools.Settlements.Application.Services.Repositories;
+using MedTools.Settlements.Infrastructure.Services.Repositories;
 
-using IncomingAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.IncomingReconciliationAct;
-using OutgoingAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct;
+using IncomingReconciliationAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.IncomingReconciliationAct;
+using OutgoingReconciliationAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct;
+using xmlReconciliationAct = MedTools.Settlements.Application.Models.XML.ReconciliationAct;
 
 
 namespace MedTools.Settlements.Infrastructure.DI;
@@ -21,6 +26,9 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
         ConfigureDatabaseOptions(services, configuration);
         RegisterDbContext(services);
         RegisterMappers(services);
+        RegisterRepositories(services);
+        RegisterValidators(services);
+        RegisterProviders(services);
 
         return services;
     }
@@ -31,8 +39,7 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
     {
         services.AddOptions<DatabaseOption>()
             .Bind(configuration.GetSection(DatabaseOption.SectionName))
-            .Validate(x => x.MTR != null
-                && !string.IsNullOrWhiteSpace(x.MTR.ConnectionString)
+            .Validate(x => !string.IsNullOrWhiteSpace(x.MTR.ConnectionString)
                 && x.MTR.Timeout != 0)
             .ValidateOnStart();
     }
@@ -54,8 +61,23 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
 
     private static void RegisterMappers(IServiceCollection services)
     {
-        services.AddAutoMapper(config => {}, 
-            typeof(IncomingAct.Mapping.ReconciliationActFileRootMappingProfile).Assembly, 
-            typeof(OutgoingAct.Mapping.ReconciliationActFileRootMappingProfile).Assembly);
+        services.AddAutoMapper(config => { },
+            typeof(IncomingReconciliationAct.Mapping.ReconciliationActFileRootMappingProfile).Assembly,
+            typeof(OutgoingReconciliationAct.Mapping.ReconciliationActFileRootMappingProfile).Assembly);
+    }
+
+    private static void RegisterRepositories(IServiceCollection services)
+    {
+        services.AddScoped<IReconciliationActRepository, ReconciliationActRepository>();
+    }
+
+    private static void RegisterValidators(IServiceCollection services)
+    {
+        services.AddSingleton<IXmlValidationService<xmlReconciliationAct.ReconciliationActFileRoot>, ReconciliationActXmlValidationService>();
+    }
+
+    private static void RegisterProviders(IServiceCollection services)
+    {
+        services.AddSingleton<XmlSchemaProvider>();
     }
 }

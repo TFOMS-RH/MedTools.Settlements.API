@@ -4,7 +4,7 @@ public sealed class DatabaseOption
 {
     public const string SectionName = "Database";
 
-    public DatabaseDetails MTR = null!;
+    public DatabaseDetails MTR { get; set; } = null!;
 }
 
 public sealed class DatabaseDetails

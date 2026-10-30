@@ -10,4 +10,7 @@
 		<ProjectReference Include="..\MedTools.Settlements.Domain\MedTools.Settlements.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup Label="Packages">
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
+	</ItemGroup>
 </Project>
