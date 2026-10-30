@@ -6,16 +6,21 @@ using Microsoft.Extensions.DependencyInjection;
 using MedTools.Settlements.Infrastructure.Common.Options;
 using MedTools.Settlements.Infrastructure.Database.Contexts;
 
+using IncomingAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.IncomingReconciliationAct;
+using OutgoingAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct;
+
+
 namespace MedTools.Settlements.Infrastructure.DI;
 
-public static class DatabaseServiceCollectionExtensions
+public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
 {
-    public static IServiceCollection AddMedToolsSettlementsDatabaseServices(
+    public static IServiceCollection AddMedToolsInfrastructureSettlementsServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
         ConfigureDatabaseOptions(services, configuration);
         RegisterDbContext(services);
+        RegisterMappers(services);
 
         return services;
     }
@@ -45,5 +50,12 @@ public static class DatabaseServiceCollectionExtensions
                     sqlServerOptionsBuilder.CommandTimeout(databaseOptions.MTR.Timeout);
                 });
         });
+    }
+
+    private static void RegisterMappers(IServiceCollection services)
+    {
+        services.AddAutoMapper(config => {}, 
+            typeof(IncomingAct.Mapping.ReconciliationActFileRootMappingProfile).Assembly, 
+            typeof(OutgoingAct.Mapping.ReconciliationActFileRootMappingProfile).Assembly);
     }
 }

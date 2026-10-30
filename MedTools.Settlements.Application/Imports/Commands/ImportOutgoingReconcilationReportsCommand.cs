@@ -12,8 +12,6 @@ public sealed class ImportOutgoingReconcilationReportsCommand(
         IReadOnlyCollection<ImportFile> files,
         CancellationToken cancellationToken)
     {
-        var validationErrors = new Dictionary<string, ICollection<string>>();
-        var validationEntities = new List<ReconciliationActFileRoot>();
 
         foreach (var file in files)
         {
@@ -21,15 +19,6 @@ public sealed class ImportOutgoingReconcilationReportsCommand(
                 file.Content,
                 XmlFormat.S);
 
-            if (result.Value is not null)
-            {
-                validationEntities.Add(result.Value);
-                continue;
-            }
-
-            validationErrors.Add(
-                file.FileName, 
-                result.Errors);
 
         }
     }
