@@ -1,41 +1,41 @@
-﻿using AutoMapper;
+﻿using MedTools.Settlements.Infrastructure.Database.Contexts;
 
-using MedTools.Settlements.Infrastructure.Database.Contexts;
-using MedTools.Settlements.Application.Services.Repositories;
-
-using XmlReconciliationAct = MedTools.Settlements.Application.Models.XML.ReconciliationAct;
-using DbEntityOutgoingReconciliationAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct;
+using Incoming = MedTools.Settlements.Infrastructure.Database.Interterritorial.Acts.Reconciliation.Incoming;
+using Outgoing = MedTools.Settlements.Infrastructure.Database.Interterritorial.Acts.Reconciliation.Outgoing;
 
 namespace MedTools.Settlements.Infrastructure.Services.Repositories;
 
-public sealed class ReconciliationActRepository(
-    IMapper mapper,
-    InterterritorialSettlementDbContext dbContext) : IReconciliationActRepository
+public sealed class ReconciliationActRepository(InterterritorialSettlementDbContext dbContext)
 {
-    public async Task SaveAsync(
-        IReadOnlyCollection<XmlReconciliationAct.ReconciliationActFileRoot> xmlModels,
+    public async Task SaveOutgoingReconciliationActAsync(
+        IReadOnlyCollection<Outgoing.Models.ReconciliationActFileRoot> actRoots,
         CancellationToken cancellationToken)
     {
-        var mapEntities = new List<DbEntityOutgoingReconciliationAct.Models.ReconciliationActFileRoot>();
-
-        foreach (var xmlModel in xmlModels)
-        {
-            var mapEntity = mapper
-                .Map<DbEntityOutgoingReconciliationAct.Models.ReconciliationActFileRoot>(xmlModel);
-
-            if (mapEntity is null) continue;
-
-            mapEntities.Add(mapEntity);
-        }
+        if(actRoots.Count  == 0) return;
 
         await dbContext
-            .Set<DbEntityOutgoingReconciliationAct.Models.ReconciliationActFileRoot>()
+            .Set<Outgoing.Models.ReconciliationActFileRoot>()
             .AddRangeAsync(
-                mapEntities,
+                entities: actRoots,
                 cancellationToken: cancellationToken);
 
         await dbContext.SaveChangesAsync(
             cancellationToken: cancellationToken);
     }
-    
+
+    public async Task SaveIncomingReconciliationActAsync(
+        IReadOnlyCollection<Incoming.Models.ReconciliationActFileRoot> actRoots,
+        CancellationToken cancellationToken)
+    {
+        if (actRoots.Count == 0) return;
+
+        await dbContext
+            .Set<Incoming.Models.ReconciliationActFileRoot>()
+            .AddRangeAsync(
+                entities: actRoots,
+                cancellationToken: cancellationToken);
+
+        await dbContext.SaveChangesAsync(
+            cancellationToken: cancellationToken);
+    }
 }

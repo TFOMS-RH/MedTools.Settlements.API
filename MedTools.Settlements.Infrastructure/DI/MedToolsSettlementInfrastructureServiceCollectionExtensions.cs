@@ -7,13 +7,11 @@ using MedTools.Settlements.Application.Services;
 using MedTools.Settlements.Infrastructure.Services;
 using MedTools.Settlements.Infrastructure.Common.Options;
 using MedTools.Settlements.Infrastructure.Database.Contexts;
-using MedTools.Settlements.Application.Services.Repositories;
 using MedTools.Settlements.Infrastructure.Services.Repositories;
 
-using IncomingReconciliationAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.IncomingReconciliationAct;
-using OutgoingReconciliationAct = MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct;
-using xmlReconciliationAct = MedTools.Settlements.Application.Models.XML.ReconciliationAct;
-
+using XML = MedTools.Settlements.Application.Models.XML;
+using Incoming = MedTools.Settlements.Infrastructure.Database.Interterritorial.Acts.Reconciliation.Incoming;
+using Outgoing = MedTools.Settlements.Infrastructure.Database.Interterritorial.Acts.Reconciliation.Outgoing;
 
 namespace MedTools.Settlements.Infrastructure.DI;
 
@@ -29,6 +27,7 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
         RegisterRepositories(services);
         RegisterValidators(services);
         RegisterProviders(services);
+        RegisterInternalServices(services);
 
         return services;
     }
@@ -62,22 +61,27 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
     private static void RegisterMappers(IServiceCollection services)
     {
         services.AddAutoMapper(config => { },
-            typeof(IncomingReconciliationAct.Mapping.ReconciliationActFileRootMappingProfile).Assembly,
-            typeof(OutgoingReconciliationAct.Mapping.ReconciliationActFileRootMappingProfile).Assembly);
+            typeof(Incoming.Mapping.ReconciliationActFileRootMappingProfile).Assembly,
+            typeof(Outgoing.Mapping.ReconciliationActFileRootMappingProfile).Assembly);
     }
 
     private static void RegisterRepositories(IServiceCollection services)
     {
-        services.AddScoped<IReconciliationActRepository, ReconciliationActRepository>();
+        services.AddScoped<ReconciliationActRepository>();
     }
 
     private static void RegisterValidators(IServiceCollection services)
     {
-        services.AddSingleton<IXmlValidationService<xmlReconciliationAct.ReconciliationActFileRoot>, ReconciliationActXmlValidationService>();
+        services.AddSingleton<IXmlValidationService<XML.ReconciliationAct.ReconciliationActFileRoot>, ReconciliationActXmlValidationService>();
     }
 
     private static void RegisterProviders(IServiceCollection services)
     {
         services.AddSingleton<XmlSchemaProvider>();
+    }
+
+    private static void RegisterInternalServices(IServiceCollection services)
+    {
+        services.AddScoped<IActsImportService, ActsImportService>();
     }
 }
