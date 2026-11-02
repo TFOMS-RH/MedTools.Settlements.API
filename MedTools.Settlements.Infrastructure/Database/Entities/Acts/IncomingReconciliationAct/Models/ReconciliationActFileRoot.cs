@@ -4,7 +4,7 @@ public sealed class ReconciliationActFileRoot
 {
     public int Uid { get; set; }
 
-    public DateOnly UploadDate { get; set; }
+    public DateTime UploadDate { get; set; }
     public string Uploader { get; set; } = string.Empty;
     public short ActStatus { get; set; }
 

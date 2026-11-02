@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct.Models;
+using MedTools.Settlements.Infrastructure.Database.Entities.Acts.IncomingReconciliationAct.Models;
 
 namespace MedTools.Settlements.Infrastructure.Database.Entities.Acts.IncomingReconciliationAct.Configuration;
 

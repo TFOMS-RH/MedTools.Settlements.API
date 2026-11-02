@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct.Models;
 
 namespace MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct.Configuration;
@@ -11,8 +12,8 @@ public sealed class ReconciliationActFileRootDbEntityConfiguration : IEntityType
         builder.ToTable("sver_out_acts_zl_list").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid).HasColumnName("uid");
-        builder.Property(prop => prop.UploadDate).HasColumnName("uploaddate");
-        builder.Property(prop => prop.Uploader).HasColumnName("uploader");
-        builder.Property(prop => prop.ActStatus).HasColumnName("status");
+        builder.Property(prop => prop.UploadDate).HasColumnName("uploaddate").IsRequired(false);
+        builder.Property(prop => prop.Uploader).HasColumnName("uploader").IsRequired(false);
+        builder.Property(prop => prop.ActStatus).HasColumnName("status").IsRequired(false);
     }
 }

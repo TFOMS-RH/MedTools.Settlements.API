@@ -11,7 +11,6 @@ public sealed class ReconciliationActMappingProfile : Profile
     {
         CreateMap<XmlReconciliationAct.ReconciliationAct, DbEntityOutgoingReconciliationAct.ReconciliationAct>()
             .ForMember(x => x.Uid, opt => opt.Ignore())
-            .ForMember(x => x.ReconciliationActFileRootUid, opt => opt.Ignore())
-            .ForMember(x => x.ReconciliationActFileRoot, opt => opt.Ignore());
+            .ForMember(x => x.ReconciliationActFileRootUid, opt => opt.Ignore());
     }
 }

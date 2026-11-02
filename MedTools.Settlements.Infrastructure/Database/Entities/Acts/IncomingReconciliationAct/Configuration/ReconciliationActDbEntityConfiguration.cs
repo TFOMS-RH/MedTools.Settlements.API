@@ -12,7 +12,7 @@ public sealed class ReconciliationActDbEntityConfiguration : IEntityTypeConfigur
         builder.ToTable("sver_in_acts_act").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid).HasColumnName("uid");
-        builder.Property(prop => prop.ReconciliationActFileRootUid).HasColumnName("sver_out_acts_zl_list_uid");
+        builder.Property(prop => prop.ReconciliationActFileRootUid).HasColumnName("sver_in_acts_zl_list_uid");
         builder.Property(prop => prop.Year).HasColumnName("year");
         builder.Property(prop => prop.Quarter).HasColumnName("qr");
         builder.Property(prop => prop.ActNumber).HasColumnName("n_act");

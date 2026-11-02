@@ -1,4 +1,5 @@
-﻿using System.Xml.Schema;
+﻿using System.Reflection;
+using System.Xml.Schema;
 
 using MedTools.Settlements.Domain.Enums;
 
@@ -16,14 +17,14 @@ public sealed class XmlSchemaProvider
                     AppContext.BaseDirectory,
                     "Common",
                     "Schemas",
-                    "interterritoirial_format_S")),
+                    "interterritoirial_format_S.xsd")),
 
             [XmlFormat.Z] = LoadSchema(
                 Path.Combine(
                     AppContext.BaseDirectory,
                     "Common",
                     "Schemas",
-                    "interterritoirial_format_Z"))
+                    "interterritoirial_format_Z.xsd"))
         };
     }
 

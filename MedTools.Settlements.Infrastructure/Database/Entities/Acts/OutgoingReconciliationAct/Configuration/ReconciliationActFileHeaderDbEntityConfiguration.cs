@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct.Models;
 
 namespace MedTools.Settlements.Infrastructure.Database.Entities.Acts.OutgoingReconciliationAct.Configuration;
@@ -12,9 +13,9 @@ public sealed class ReconciliationActFileHeaderDbEntityConfiguration : IEntityTy
 
         builder.Property(prop => prop.Uid).HasColumnName("uid");
         builder.Property(prop => prop.ReconciliationActFileRootUid).HasColumnName("sver_out_acts_zl_list_uid");
-        builder.Property(prop => prop.Version).HasColumnName("version");
-        builder.Property(prop => prop.ActDate).HasColumnName("data");
-        builder.Property(prop => prop.Filename).HasColumnName("filename");
+        builder.Property(prop => prop.Version).HasColumnName("version").IsRequired(false);
+        builder.Property(prop => prop.FileDate).HasColumnName("data").IsRequired(false);
+        builder.Property(prop => prop.Filename).HasColumnName("filename").IsRequired(false);
 
         builder.HasOne(reconciliationActFileHeader => reconciliationActFileHeader.ReconciliationActFileRoot)
             .WithOne(reconciliationActFileRoot => reconciliationActFileRoot.Header)

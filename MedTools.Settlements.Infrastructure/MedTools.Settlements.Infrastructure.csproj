@@ -19,9 +19,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Common\Schemas\*">
+		<Content Include="Common\Schemas\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Database\Entities\Registers\" />
 	</ItemGroup>
 
 </Project>
