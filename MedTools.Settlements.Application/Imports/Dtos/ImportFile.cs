@@ -2,4 +2,5 @@
 
 public sealed record ImportFile(
     string Filename,
+    long Length,
     Stream Content);

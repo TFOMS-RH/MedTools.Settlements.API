@@ -27,7 +27,7 @@ public sealed class ImportReconciliationActsCommand(
         {
             var xmlFileValidationResult = xmlFileValidationService.Validate(
                 filename: requestFile.Filename,
-                fileStream: requestFile.Content);
+                fileLength: requestFile.Length);
 
             if (xmlFileValidationResult.IsValid)
             {

@@ -54,7 +54,7 @@ public sealed class ActsImportService(
                 break;
 
             default:
-                throw new IndexOutOfRangeException();
+                throw new ArgumentOutOfRangeException("");
         }
     }
 }

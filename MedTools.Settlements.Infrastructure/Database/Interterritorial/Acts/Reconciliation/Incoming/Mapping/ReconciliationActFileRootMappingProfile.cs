@@ -13,10 +13,7 @@ public sealed class ReconciliationActFileRootMappingProfile : Profile
         CreateMap<XML.ReconciliationAct.ReconciliationActFileRoot, ReconciliationActFileRoot>()
             .ForMember(x => x.Uid, opt => opt.Ignore())
             .ForMember(x => x.ActStatus, opt => opt.Ignore())
-            .ForMember(x => x.Header, opt => opt.Ignore())
             .ForMember(x => x.UploadDate, opt => opt.Ignore())
-            .ForMember(x => x.Uploader, opt => opt.Ignore())
-            .ForMember(x => x.Act, opt => opt.Ignore())
-            .ForMember(x => x.Records, opt => opt.Ignore());
+            .ForMember(x => x.Uploader, opt => opt.Ignore());
     }
 }

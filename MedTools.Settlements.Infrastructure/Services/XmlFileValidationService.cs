@@ -7,13 +7,13 @@ public sealed class XmlFileValidationService : IXmlFileValidationService
 {
     public XmlFileValidationResult Validate(
         string filename,
-        Stream fileStream)
+        long fileLength)
     {
         var errors = new List<string>();
 
         if (!filename.EndsWith(".xml")) errors.Add("Переданный файл имеет формат, отличный от .xml");
 
-        if (fileStream.Length > 50 * 1024 * 1024) errors.Add("Файл превышает допустимый размер");
+        if (fileLength > 50 * 1024 * 1024) errors.Add("Файл превышает допустимый размер");
 
         return new XmlFileValidationResult(
             IsValid: errors.Count == 0,
