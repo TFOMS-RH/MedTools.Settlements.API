@@ -5,5 +5,6 @@ public enum ImportStatus
     None = 0,
     Validated = 1,
     Imported = 2,
-    ValidationFailed = 3,
+    SchemaValidationFailed = 3,
+    FileValidationFailed = 4
 }

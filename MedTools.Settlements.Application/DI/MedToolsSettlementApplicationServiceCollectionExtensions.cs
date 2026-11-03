@@ -17,6 +17,6 @@ public static class MedToolsSettlementApplicationServiceCollectionExtensions
     private static void RegisterCommands(
         IServiceCollection services)
     {
-        services.AddScoped<ImportReconcilationActsCommand>();
+        services.AddScoped<ImportReconciliationActsCommand>();
     }
 }

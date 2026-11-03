@@ -9,14 +9,14 @@ using MedTools.Settlements.Application.Models.XML.ReconciliationAct;
 
 namespace MedTools.Settlements.Infrastructure.Services;
 
-public sealed class ReconciliationActXmlValidationService(
-    XmlSchemaProvider xmlSchemasService) : IXmlValidationService<ReconciliationActFileRoot>
+public sealed class ReconciliationActXmlDeserializationService(
+    XmlSchemaProvider xmlSchemasService) : IXmlDeserializationService<ReconciliationActFileRoot>
 {
-    public XmlValidationResult<ReconciliationActFileRoot> Validate(
-        Stream fileStream,
+    public XmlDeserializationResult<ReconciliationActFileRoot> Deserialize(
+        Stream source,
         XmlFormat format)
     {
-        var errors = new List<string>();
+        var schemaValidationErrors = new List<string>();
 
         var readerSettings = new XmlReaderSettings()
         {
@@ -25,23 +25,23 @@ public sealed class ReconciliationActXmlValidationService(
             ValidationType = ValidationType.Schema,
         };
 
-        readerSettings.ValidationEventHandler += (_, eventArgs) => errors.Add(eventArgs.Message);
+        readerSettings.ValidationEventHandler += (_, eventArgs) => schemaValidationErrors.Add(eventArgs.Message);
 
-        var reader = XmlReader.Create(fileStream, readerSettings);
+        var reader = XmlReader.Create(source, readerSettings);
         var serializer = new XmlSerializer(typeof(ReconciliationActFileRoot));
 
         var value = serializer.Deserialize(reader);
 
         if (value is not ReconciliationActFileRoot deserializeValue)
         {
-            return new XmlValidationResult<ReconciliationActFileRoot>(
+            return new XmlDeserializationResult<ReconciliationActFileRoot>(
                 null,
-                errors);
+                schemaValidationErrors);
         }
 
-        return new XmlValidationResult<ReconciliationActFileRoot>(
+        return new XmlDeserializationResult<ReconciliationActFileRoot>(
             Value: deserializeValue,
-            Errors: errors);
+            SchemaValidationErrors: schemaValidationErrors);
     }
 
 }

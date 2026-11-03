@@ -1,5 +1,5 @@
 ﻿namespace MedTools.Settlements.Application.Models.Results;
 
-public sealed record XmlValidationResult<T>(
-    T? Value,
+public sealed record XmlFileValidationResult(
+    bool IsValid,
     ICollection<string> Errors);

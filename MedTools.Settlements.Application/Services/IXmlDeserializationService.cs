@@ -3,9 +3,9 @@ using MedTools.Settlements.Application.Models.Results;
 
 namespace MedTools.Settlements.Application.Services;
 
-public interface IXmlValidationService<T> where T : class
+public interface IXmlDeserializationService<TEntity> where TEntity : class
 {
-    public XmlValidationResult<T> Validate(
-        Stream fileStream,
+    public XmlDeserializationResult<TEntity> Deserialize(
+        Stream source,
         XmlFormat format);
 }

@@ -31,8 +31,6 @@ public sealed class ActsImportService(
                     incomingReconciliationActs.Add(dbEntity);
                 }
 
-                if (incomingReconciliationActs.Count == 0) throw new Exception();
-
                 await reconciliationActRepository.SaveIncomingReconciliationActAsync(
                     incomingReconciliationActs,
                     cancellationToken: cancellationToken);
@@ -48,8 +46,6 @@ public sealed class ActsImportService(
                     var dbEntity = mapper.Map<Outgoing.Models.ReconciliationActFileRoot>(xmlModel);
                     outgoingReconciliationActs.Add(dbEntity);
                 }
-
-                if (outgoingReconciliationActs.Count == 0) throw new Exception();
 
                 await reconciliationActRepository.SaveOutgoingReconciliationActAsync(
                     outgoingReconciliationActs,

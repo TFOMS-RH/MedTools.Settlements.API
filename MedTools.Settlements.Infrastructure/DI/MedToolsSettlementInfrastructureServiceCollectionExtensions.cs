@@ -25,8 +25,6 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
         RegisterDbContext(services);
         RegisterMappers(services);
         RegisterRepositories(services);
-        RegisterValidators(services);
-        RegisterProviders(services);
         RegisterInternalServices(services);
 
         return services;
@@ -70,18 +68,11 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
         services.AddScoped<ReconciliationActRepository>();
     }
 
-    private static void RegisterValidators(IServiceCollection services)
-    {
-        services.AddSingleton<IXmlValidationService<XML.ReconciliationAct.ReconciliationActFileRoot>, ReconciliationActXmlValidationService>();
-    }
-
-    private static void RegisterProviders(IServiceCollection services)
-    {
-        services.AddSingleton<XmlSchemaProvider>();
-    }
-
     private static void RegisterInternalServices(IServiceCollection services)
     {
         services.AddScoped<IActsImportService, ActsImportService>();
+        services.AddSingleton<IXmlDeserializationService<XML.ReconciliationAct.ReconciliationActFileRoot>, ReconciliationActXmlDeserializationService>();
+        services.AddSingleton<XmlSchemaProvider>();
+        services.AddSingleton<IXmlFileValidationService, XmlFileValidationService>();
     }
 }
