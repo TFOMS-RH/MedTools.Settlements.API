@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Elements;
 
 namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Configuration.Elements;
@@ -8,23 +9,43 @@ public sealed class MedicalRecordDbEntityConfiguration : IEntityTypeConfiguratio
 {
     public void Configure(EntityTypeBuilder<MedicalRecordDbEntity> builder)
     {
-        builder.ToTable("zap").HasKey(entity => entity.Uid);
+        builder.ToTable("dbo.zap").HasKey(entity => entity.Uid);
 
-        builder.Property(prop => prop.Uid).HasColumnName("uid").ValueGeneratedOnAdd();
-        builder.Property(prop => prop.MedicalRegistryUid).HasColumnName("zl_list_uid");
-        builder.Property(prop => prop.PatientUid).HasColumnName("pacient");
+        builder.Property(prop => prop.Uid)
+            .HasColumnName("uid")
+            .HasColumnType("int")
+            .ValueGeneratedOnAdd();
 
-        builder.Property(prop => prop.RecordSequenceNumber).HasColumnName("n_zap");
-        builder.Property(prop => prop.IsRevisedRecord).HasColumnName("pr_nov");
+        builder.Property(prop => prop.MedicalRegistryUid)
+            .HasColumnName("zl_list_uid")
+            .HasColumnType("int")
+            .IsRequired();
+
+        builder.Property(prop => prop.PatientUid)
+            .HasColumnName("pacient")
+            .HasColumnType("int")
+            .IsRequired();
+
+        builder.Property(prop => prop.RecordSequenceNumber)
+            .HasColumnName("n_zap")
+            .HasColumnType("bigint")
+            .IsRequired();
+
+        builder.Property(prop => prop.IsRevisedRecord)
+            .HasColumnName("pr_nov")
+            .HasColumnType("tinyint")
+            .IsRequired();
 
         builder
             .HasOne(medicalRecord => medicalRecord.MedicalRegistry)
             .WithMany(medicalRegistry => medicalRegistry.MedicalRecords)
-            .HasForeignKey(medicalRecord => medicalRecord.MedicalRegistryUid);
+            .HasForeignKey(medicalRecord => medicalRecord.MedicalRegistryUid)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(medicalRecord => medicalRecord.Patient)
             .WithOne(patient => patient.MedicalRecord)
-            .HasForeignKey<MedicalRecordDbEntity>(medicalRecord => medicalRecord.PatientUid);
+            .HasForeignKey<MedicalRecordDbEntity>(medicalRecord => medicalRecord.PatientUid)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
