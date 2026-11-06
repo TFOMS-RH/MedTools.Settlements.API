@@ -1,0 +1,14 @@
+﻿using AutoMapper;
+using XML = MedTools.Settlements.Application.Models.XML;
+
+namespace MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Incoming.Mapping;
+
+public sealed class ReconciliationActRecordMappingProfile : Profile
+{
+    public ReconciliationActRecordMappingProfile()
+    {
+        CreateMap<XML.ReconciliationAct.ReconciliationActRecord, Models.ReconciliationActRecord>()
+            .ForMember(x => x.Uid, opt => opt.Ignore())
+            .ForMember(x => x.ReconciliationActFileRootUid, opt => opt.Ignore());
+    }
+}
