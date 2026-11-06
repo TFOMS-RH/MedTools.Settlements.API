@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Database\InternalSettlements\MedicalRegister\Configuration\" />
+	  <Folder Include="Database\InternalSettlements\" />
 	</ItemGroup>
 
 </Project>
