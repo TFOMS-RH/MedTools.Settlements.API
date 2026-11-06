@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 
-using MedTools.Settlements.Domain.Enums;
+using MedTools.Settlements.Core.Enums;
 using MedTools.Settlements.Application.Services;
-using MedTools.Settlements.Infrastructure.Services.Repositories;
 using MedTools.Settlements.Application.Models.XML.ReconciliationAct;
+using MedTools.Settlements.Infrastructure.Services.Repositories;
 
 using Incoming = MedTools.Settlements.Infrastructure.Database.Interterritorial.Acts.Reconciliation.Incoming;
 using Outgoing = MedTools.Settlements.Infrastructure.Database.Interterritorial.Acts.Reconciliation.Outgoing;

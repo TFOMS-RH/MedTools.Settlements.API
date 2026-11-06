@@ -1,4 +1,4 @@
-﻿namespace MedTools.Settlements.Domain.Enums;
+﻿namespace MedTools.Settlements.Core.Enums;
 
 public enum ImportStatus
 {

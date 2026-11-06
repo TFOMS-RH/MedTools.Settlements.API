@@ -1,8 +1,7 @@
 ﻿using System.Xml;
 using System.Xml.Serialization;
 
-using MedTools.Settlements.Domain.Enums;
-
+using MedTools.Settlements.Core.Enums;
 using MedTools.Settlements.Application.Services;
 using MedTools.Settlements.Application.Models.Results;
 using MedTools.Settlements.Application.Models.XML.ReconciliationAct;

@@ -1,5 +1,4 @@
-﻿using MedTools.Settlements.Domain.Enums;
-
+﻿using MedTools.Settlements.Core.Enums;
 using MedTools.Settlements.Application.Services;
 using MedTools.Settlements.Application.Models.Dtos;
 using MedTools.Settlements.Application.Imports.Dtos;

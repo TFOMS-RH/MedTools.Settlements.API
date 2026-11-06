@@ -1,7 +1,6 @@
-﻿using System.Reflection;
-using System.Xml.Schema;
+﻿using System.Xml.Schema;
 
-using MedTools.Settlements.Domain.Enums;
+using MedTools.Settlements.Core.Enums;
 
 namespace MedTools.Settlements.Infrastructure.Services;
 

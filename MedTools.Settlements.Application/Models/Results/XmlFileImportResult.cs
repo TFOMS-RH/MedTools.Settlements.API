@@ -1,4 +1,4 @@
-﻿using MedTools.Settlements.Domain.Enums;
+﻿using MedTools.Settlements.Core.Enums;
 
 namespace MedTools.Settlements.Application.Models.Results;
 

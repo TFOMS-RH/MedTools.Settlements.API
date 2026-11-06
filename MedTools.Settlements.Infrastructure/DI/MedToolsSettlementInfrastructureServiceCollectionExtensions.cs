@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+
 using MedTools.Settlements.Application.Services;
 using MedTools.Settlements.Infrastructure.Services;
 using MedTools.Settlements.Infrastructure.Common.Options;
 using MedTools.Settlements.Infrastructure.Database.Contexts;
 using MedTools.Settlements.Infrastructure.Services.Repositories;
+using MedTools.Settlements.Application.Models.XML.ReconciliationAct;
 
-using XML = MedTools.Settlements.Application.Models.XML;
 using Incoming = MedTools.Settlements.Infrastructure.Database.Interterritorial.Acts.Reconciliation.Incoming;
 using Outgoing = MedTools.Settlements.Infrastructure.Database.Interterritorial.Acts.Reconciliation.Outgoing;
 
@@ -71,7 +72,7 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
     private static void RegisterInternalServices(IServiceCollection services)
     {
         services.AddScoped<IActsImportService, ActsImportService>();
-        services.AddSingleton<IXmlDeserializationService<XML.ReconciliationAct.ReconciliationActFileRoot>, ReconciliationActXmlDeserializationService>();
+        services.AddSingleton<IXmlDeserializationService<ReconciliationActFileRoot>, ReconciliationActXmlDeserializationService>();
         services.AddSingleton<XmlSchemaProvider>();
         services.AddSingleton<IXmlFileValidationService, XmlFileValidationService>();
     }
