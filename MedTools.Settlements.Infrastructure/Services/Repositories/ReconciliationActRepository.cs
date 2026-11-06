@@ -1,5 +1,4 @@
-﻿using MedTools.Settlements.Infrastructure.Database.Contexts;
-
+﻿using MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Contexts;
 using Incoming = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Incoming;
 using Outgoing = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Outgoing;
 

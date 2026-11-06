@@ -5,6 +5,8 @@ public sealed class DatabaseOption
     public const string SectionName = "Database";
 
     public DatabaseDetails MTR { get; set; } = null!;
+    public DatabaseDetails SMODB18 { get; set; } = null!;
+    public DatabaseDetails INOGOROD18 { get; set; } = null!;
 }
 
 public sealed class DatabaseDetails

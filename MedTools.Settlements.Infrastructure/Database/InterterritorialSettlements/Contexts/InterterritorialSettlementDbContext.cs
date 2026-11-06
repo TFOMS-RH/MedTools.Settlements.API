@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace MedTools.Settlements.Infrastructure.Database.Contexts;
+namespace MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Contexts;
 
 public sealed class InterterritorialSettlementDbContext(
     DbContextOptions<InterterritorialSettlementDbContext> options) : DbContext(options)

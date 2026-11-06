@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-
 using MedTools.Settlements.Application.Services;
 using MedTools.Settlements.Infrastructure.Services;
 using MedTools.Settlements.Infrastructure.Common.Options;
-using MedTools.Settlements.Infrastructure.Database.Contexts;
 using MedTools.Settlements.Infrastructure.Services.Repositories;
 using MedTools.Settlements.Application.Models.XML.ReconciliationAct;
+using MedTools.Settlements.Infrastructure.Database.InternalSettlements.Contexts;
+using MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Contexts;
 
 using Incoming = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Incoming;
 using Outgoing = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Outgoing;
@@ -23,7 +23,7 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
         IConfiguration configuration)
     {
         ConfigureDatabaseOptions(services, configuration);
-        RegisterDbContext(services);
+        RegisterDbContexts(services);
         RegisterMappers(services);
         RegisterRepositories(services);
         RegisterInternalServices(services);
@@ -42,19 +42,48 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
             .ValidateOnStart();
     }
 
-    private static void RegisterDbContext(IServiceCollection services)
+    private static void RegisterDbContexts(IServiceCollection services)
     {
-        services.AddDbContext<InterterritorialSettlementDbContext>((sp, dbContextOptionsBuilder) =>
-        {
-            var databaseOptions = sp.GetRequiredService<IOptions<DatabaseOption>>().Value;
+        services.AddDbContext<InterterritorialSettlementDbContext>(
+            (sp, dbContextOptionsBuilder) =>
+            {
+                var databaseOptions = sp.GetRequiredService<IOptions<DatabaseOption>>().Value;
 
-            dbContextOptionsBuilder.UseSqlServer(
-                connectionString: databaseOptions.MTR.ConnectionString,
-                (sqlServerOptionsBuilder) =>
-                {
-                    sqlServerOptionsBuilder.CommandTimeout(databaseOptions.MTR.Timeout);
-                });
-        });
+                dbContextOptionsBuilder.UseSqlServer(
+                    connectionString: databaseOptions.MTR.ConnectionString,
+                    (sqlServerOptionsBuilder) =>
+                    {
+                        sqlServerOptionsBuilder.CommandTimeout(databaseOptions.MTR.Timeout);
+                    });
+            });
+
+        services.AddDbContext<InternalSettlementMedicalRegisterDbContext>(
+            (sp, dbContextOptionsBuilder) =>
+            {
+                var databaseOptions = sp.GetRequiredService<IOptions<DatabaseOption>>().Value;
+
+                dbContextOptionsBuilder.UseSqlServer(
+                    connectionString: databaseOptions.SMODB18.ConnectionString,
+                    (sqlServerOptionsBuilder) =>
+                    {
+                        sqlServerOptionsBuilder.CommandTimeout(databaseOptions.SMODB18.Timeout);
+                    });
+
+            });
+
+        services.AddDbContext<InterterritorialSettlementMedicalRegisterDbContext>(
+            (sp, dbContextOptionsBuilder) =>
+            {
+                var databaseOptions = sp.GetRequiredService<IOptions<DatabaseOption>>().Value;
+
+                dbContextOptionsBuilder.UseSqlServer(
+                    connectionString: databaseOptions.INOGOROD18.ConnectionString,
+                    (sqlServerOptionsBuilder) =>
+                    {
+                        sqlServerOptionsBuilder.CommandTimeout(databaseOptions.INOGOROD18.Timeout);
+                    });
+
+            });
     }
 
     private static void RegisterMappers(IServiceCollection services)
