@@ -9,7 +9,7 @@ public sealed class PrescriptionDbEntityConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<PrescriptionDbEntity> builder)
     {
-        builder.ToTable("dbo.naz").HasKey(entity => entity.Uid);
+        builder.ToTable("naz").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

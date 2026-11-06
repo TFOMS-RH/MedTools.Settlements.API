@@ -9,7 +9,7 @@ public sealed class ConcomitantDiagnosisDbEntityConfiguration : IEntityTypeConfi
 {
     public void Configure(EntityTypeBuilder<ConcomitantDiagnosisDbEntity> builder)
     {
-        builder.ToTable("dbo.ds2").HasKey(entity => entity.Uid);
+        builder.ToTable("ds2").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

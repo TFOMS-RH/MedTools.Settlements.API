@@ -9,7 +9,7 @@ public sealed class ConsultationDbEntityConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<ConsultationDbEntity> builder)
     {
-        builder.ToTable("dbo.cons").HasKey(entity => entity.Uid);
+        builder.ToTable("cons").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

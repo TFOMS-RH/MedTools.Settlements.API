@@ -9,7 +9,7 @@ public sealed class CompletedCaseDbEntityConfiguration : IEntityTypeConfiguratio
 {
     public void Configure(EntityTypeBuilder<CompletedCaseDbEntity> builder)
     {
-        builder.ToTable("dbo.z_sl").HasKey(entity => entity.Uid);
+        builder.ToTable("z_sl").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

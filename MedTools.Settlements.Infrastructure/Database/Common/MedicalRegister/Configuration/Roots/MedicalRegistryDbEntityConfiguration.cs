@@ -9,7 +9,7 @@ public sealed class MedicalRegistryDbEntityConfiguration : IEntityTypeConfigurat
 {
     public void Configure(EntityTypeBuilder<MedicalRegistryDbEntity> builder)
     {
-        builder.ToTable("dbo.zl_list").HasKey(entity => entity.Uid);
+        builder.ToTable("zl_list").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

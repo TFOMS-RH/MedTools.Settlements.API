@@ -9,7 +9,7 @@ public sealed class InvoiceDbEntityConfiguration : IEntityTypeConfiguration<Invo
 {
     public void Configure(EntityTypeBuilder<InvoiceDbEntity> builder)
     {
-        builder.ToTable("dbo.schet").HasKey(entity => entity.Uid);
+        builder.ToTable("schet").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

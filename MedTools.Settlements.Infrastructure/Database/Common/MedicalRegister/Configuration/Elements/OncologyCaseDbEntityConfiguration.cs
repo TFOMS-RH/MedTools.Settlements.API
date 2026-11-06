@@ -9,7 +9,7 @@ public sealed class OncologyCaseDbEntityConfiguration : IEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<OncologyCaseDbEntity> builder)
     {
-        builder.ToTable("dbo.onk_sl").HasKey(entity => entity.Uid);
+        builder.ToTable("onk_sl").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

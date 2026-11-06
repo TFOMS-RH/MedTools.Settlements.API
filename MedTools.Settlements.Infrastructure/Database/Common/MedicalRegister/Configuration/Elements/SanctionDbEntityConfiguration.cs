@@ -9,7 +9,7 @@ public sealed class SanctionDbEntityConfiguration : IEntityTypeConfiguration<San
 {
     public void Configure(EntityTypeBuilder<SanctionDbEntity> builder)
     {
-        builder.ToTable("dbo.sank").HasKey(entity => entity.Uid);
+        builder.ToTable("sank").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

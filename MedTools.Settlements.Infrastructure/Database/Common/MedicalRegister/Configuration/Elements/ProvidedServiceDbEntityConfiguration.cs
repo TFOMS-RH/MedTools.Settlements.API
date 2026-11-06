@@ -9,7 +9,7 @@ public sealed class ProvidedServiceDbEntityConfiguration : IEntityTypeConfigurat
 {
     public void Configure(EntityTypeBuilder<ProvidedServiceDbEntity> builder)
     {
-        builder.ToTable("dbo.usl").HasKey(entity => entity.Uid);
+        builder.ToTable("usl").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

@@ -9,7 +9,7 @@ public sealed class ComplicationDiagnosisDbEntityConfiguration : IEntityTypeConf
 {
     public void Configure(EntityTypeBuilder<ComplicationDiagnosisDbEntity> builder)
     {
-        builder.ToTable("dbo.ds3").HasKey(entity => entity.Uid);
+        builder.ToTable("ds3").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

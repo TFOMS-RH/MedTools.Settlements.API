@@ -49,6 +49,7 @@ public class MegaPrograma
         app.UseRouting();
 
         app.MapGroup("/api").RegisterInterterritorialSettlementEndpoints();
+        app.MapGroup("/api").RegisterInternalMedicalRegistryEndpoints();
 
         await app.RunAsync();
     }

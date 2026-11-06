@@ -9,7 +9,7 @@ public sealed class TreatmentComplexityCoefficientDbEntityConfiguration : IEntit
 {
     public void Configure(EntityTypeBuilder<TreatmentComplexityCoefficientDbEntity> builder)
     {
-        builder.ToTable("dbo.sl_koef").HasKey(entity => entity.Uid);
+        builder.ToTable("sl_koef").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

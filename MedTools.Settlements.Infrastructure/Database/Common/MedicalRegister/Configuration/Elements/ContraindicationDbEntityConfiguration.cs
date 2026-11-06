@@ -9,7 +9,7 @@ public sealed class ContraindicationDbEntityConfiguration : IEntityTypeConfigura
 {
     public void Configure(EntityTypeBuilder<ContraindicationDbEntity> builder)
     {
-        builder.ToTable("dbo.b_prot").HasKey(entity => entity.Uid);
+        builder.ToTable("b_prot").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

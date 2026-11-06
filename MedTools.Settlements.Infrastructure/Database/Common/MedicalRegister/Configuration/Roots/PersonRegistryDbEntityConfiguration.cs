@@ -9,7 +9,7 @@ public sealed class PersonRegistryDbEntityConfiguration : IEntityTypeConfigurati
 {
     public void Configure(EntityTypeBuilder<PersonRegistryDbEntity> builder)
     {
-        builder.ToTable("dbo.pers_list").HasKey(entity => entity.Uid);
+        builder.ToTable("pers_list").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

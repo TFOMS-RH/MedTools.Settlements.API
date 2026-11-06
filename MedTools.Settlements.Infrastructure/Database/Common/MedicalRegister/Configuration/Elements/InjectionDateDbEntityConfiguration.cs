@@ -9,7 +9,7 @@ public sealed class InjectionDateDbEntityConfiguration : IEntityTypeConfiguratio
 {
     public void Configure(EntityTypeBuilder<InjectionDateDbEntity> builder)
     {
-        builder.ToTable("dbo.date_inj").HasKey(entity => entity.Uid);
+        builder.ToTable("date_inj").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")

@@ -8,8 +8,8 @@ public sealed class ProvidedServiceDbEntity
     public string ServiceRecordId { get; set; } = string.Empty;
     public string MedicalOrganizationCode { get; set; } = string.Empty;
     public string Division { get; set; } = string.Empty;
-    public string? DepartmentCode { get; set; }
-    public long? MedicalProfile { get; set; }
+    public long? DepartmentCode { get; set; }
+    public int? MedicalProfile { get; set; }
     public string? MedicalInterventionType { get; set; }
     public byte IsPediatric { get; set; }
     public DateTime ServiceStartDate { get; set; }
@@ -22,7 +22,7 @@ public sealed class ProvidedServiceDbEntity
     public decimal AmountBilled { get; set; }
     public int PhysicianSpecialty { get; set; }
     public string PhysicianCode { get; set; } = string.Empty;
-    public int? IncompleteVolume { get; set; }
+    public short? IncompleteVolume { get; set; }
     public string? InternalComment { get; set; }
 
     public MedicalCaseDbEntity MedicalCase { get; set; } = null!;

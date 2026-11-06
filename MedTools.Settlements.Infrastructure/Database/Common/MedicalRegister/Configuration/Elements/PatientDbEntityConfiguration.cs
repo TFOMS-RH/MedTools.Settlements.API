@@ -9,7 +9,7 @@ public sealed class PatientDbEntityConfiguration : IEntityTypeConfiguration<Pati
 {
     public void Configure(EntityTypeBuilder<PatientDbEntity> builder)
     {
-        builder.ToTable("dbo.pacient").HasKey(entity => entity.Uid);
+        builder.ToTable("pacient").HasKey(entity => entity.Uid);
 
         builder.Property(prop => prop.Uid)
             .HasColumnName("uid")
