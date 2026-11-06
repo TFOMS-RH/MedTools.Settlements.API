@@ -1,5 +1,5 @@
-﻿using MedTools.Settlements.Application.Services;
-using MedTools.Settlements.Core.Enums;
+﻿using MedTools.Settlements.Core.Enums;
+using MedTools.Settlements.Application.Services;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups;
 
@@ -19,6 +19,7 @@ public static class InternalMedicalRegistryEndpoints
                 int month,
                 int page,
                 int pageSize,
+                string search,
                 MedicalRegisterType medicalRegisterType,
                 IMedicalRegisterReader reader,
                 CancellationToken cancellationToken) =>
@@ -30,7 +31,7 @@ public static class InternalMedicalRegistryEndpoints
                             BillingMonth: month,
                             Page: page,
                             PageSize: pageSize,
-                            Search: "",
+                            Search: search,
                             RegisterType: medicalRegisterType),
                         cancellationToken: cancellationToken);
 

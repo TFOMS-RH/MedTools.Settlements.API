@@ -19,12 +19,19 @@ public sealed class MedicalRegisterReader(
     {
         await using var dbContext = dbContextFactory.CreateDbContext(@params.RegisterType);
 
-        var baseQuery = dbContext.Set<InvoiceDbEntity>();
-        //.Where(x => x.MedicalOrganizationCode == @params.MCode
-        //    && x.BillingMonth == @params.BillingMonth
-        //    && x.BillingYear == @params.BillingYear);
+        var baseQuery = dbContext.Set<InvoiceDbEntity>()
+            .Where(x => x.MedicalOrganizationCode == @params.MCode
+                && x.BillingMonth == @params.BillingMonth
+                && x.BillingYear == @params.BillingYear);
 
-        var totalRecords = await baseQuery.CountAsync(cancellationToken: cancellationToken);
+        if (!string.IsNullOrWhiteSpace(@params.Search))
+        {
+            baseQuery = baseQuery.Where(
+                x => x.InvoiceNumber.Contains(@params.Search));
+        }
+
+        var totalRecords = await baseQuery
+            .CountAsync(cancellationToken);
 
         var items = await baseQuery
             .OrderBy(x => x.Uid)
@@ -37,11 +44,11 @@ public sealed class MedicalRegisterReader(
                 Amount: x.InvoiceAmount,
                 MedicalCasesCount: x.MedicalRegistry.MedicalRegistryHeading.TotalRecordCount ?? 0,
                 Status: x.MedicalRegistry.Status))
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
 
         return new PagedResult<InvoiceDto>(
             Values: items,
             TotalRecords: totalRecords);
-        
+
     }
 }
