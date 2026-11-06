@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MedTools.Settlements.Application.Services;
 using MedTools.Settlements.Infrastructure.Services;
 using MedTools.Settlements.Infrastructure.Common.Options;
+using MedTools.Settlements.Infrastructure.Services.Readers;
+using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Services.Repositories;
 using MedTools.Settlements.Application.Models.XML.ReconciliationAct;
 using MedTools.Settlements.Infrastructure.Database.InternalSettlements.Contexts;
@@ -100,9 +102,12 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
 
     private static void RegisterInternalServices(IServiceCollection services)
     {
-        services.AddScoped<IActsImportService, ActsImportService>();
         services.AddSingleton<IXmlDeserializationService<ReconciliationActFileRoot>, ReconciliationActXmlDeserializationService>();
         services.AddSingleton<XmlSchemaProvider>();
         services.AddSingleton<IXmlFileValidationService, XmlFileValidationService>();
+
+        services.AddScoped<IMedicalRegisterReader, MedicalRegisterReader>();
+        services.AddScoped<IActsImportService, ActsImportService>();
+        services.AddScoped<MedToolsSettlementsDbContextFactory>();
     }
 }
