@@ -5,9 +5,9 @@ using AutoMapper;
 
 using MedTools.Settlements.Core.Enums;
 
-using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Models.Params;
 using MedTools.Settlements.Application.Models.Results;
+using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 
 using MedTools.Settlements.Application.Services;
 
@@ -68,7 +68,7 @@ public sealed class MedicalRegisterReader(
     {
         var dbContext = dbContextFactory.CreateDbContext(registerType);
 
-        var medicalInvoiceDetailsList = await dbContext.Set<MedicalInvoiceDbEntity>()
+        var medicalInvoiceDetails = await dbContext.Set<MedicalInvoiceDbEntity>()
             .AsNoTracking()
             .Where(x => x.Uid == medicalInvoiceUid)
             .Select(x => new MedicalInvoiceDetailsDto(
@@ -84,9 +84,9 @@ public sealed class MedicalRegisterReader(
                 InsuranceCompanyMedicalEconomicControlPenalty: x.InsuranceCompanyMedicalEconomicControlPenalty,
                 InsuranceCompanyMedicalEconomicExpertisePenalty: x.InsuranceCompanyMedicalEconomicExpertisePenalty,
                 InsuranceCompanyMedicalCareQualityExpertisePenalty: x.InsuranceCompanyMedicalCareQualityExpertisePenalty))
-            .ToListAsync(cancellationToken);
+            .SingleOrDefaultAsync(cancellationToken);
 
-        return medicalInvoiceDetailsList.FirstOrDefault();
+        return medicalInvoiceDetails;
     }
 
     public async Task<PagedResult<CompletedCaseDto>> GetCompletedCasesAsync(
@@ -104,7 +104,7 @@ public sealed class MedicalRegisterReader(
 
         var result = await dbContext.Set<ProjectionCompletedCase>()
             .FromSqlRaw(
-                sql: StoredProcedureNames.GetCompletedCasesByMedicalInvoiceUid,
+                sql: StoredProcedureSql.GetCompletedCasesByMedicalInvoiceUid,
                 parameters: [
                         new SqlParameter("@schet_uid", @params.MedicalInvoiceUid),
                         new SqlParameter("@skip", @params.PageSize * (@params.Page - 1)),
@@ -118,6 +118,24 @@ public sealed class MedicalRegisterReader(
         return new PagedResult<CompletedCaseDto>(
             Values: mapper.Map<List<CompletedCaseDto>>(result),
             TotalRecords: recordsCount.Value is int total ? total : 0);
+
+    }
+
+    public async Task<IReadOnlyCollection<MedicalCaseDto>> GetMedicalCasesAsync(
+        int completedCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionMedicalCase>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetMedicalCasesByCompletedCaseUid,
+                parameters: new SqlParameter("pCompletedCaseUid", completedCaseUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        return mapper.Map<List<MedicalCaseDto>>(result);
 
     }
 }

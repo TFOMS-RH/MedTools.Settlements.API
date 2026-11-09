@@ -1,6 +1,6 @@
-﻿using MedTools.Settlements.Web.Endpoints.Groups.MedicalRegisters.Sources;
+﻿using MedTools.Settlements.Web.Endpoints.Groups.InternalSettlemens.MedicalRegisters.Sources;
 
-namespace MedTools.Settlements.Web.Endpoints.Groups.MedicalRegisters;
+namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlemens.MedicalRegisters;
 
 public static class MedicalRegisterEndpoints
 {
@@ -11,6 +11,7 @@ public static class MedicalRegisterEndpoints
             .WithTags("Medical Registers");
 
         group.MapMedicalInvoiceEndpoints();
+        group.MapCompletedCaseEndpoints();
 
         return group;
     }

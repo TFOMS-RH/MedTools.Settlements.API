@@ -1,6 +1,6 @@
 ﻿using MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalInvoices;
 
-namespace MedTools.Settlements.Web.Endpoints.Groups.MedicalRegisters.Sources;
+namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlemens.MedicalRegisters.Sources;
 
 public static class MedicalInvoiceEndpoints
 {

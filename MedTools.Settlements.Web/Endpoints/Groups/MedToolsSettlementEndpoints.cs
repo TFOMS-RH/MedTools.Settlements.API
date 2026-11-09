@@ -1,5 +1,5 @@
-﻿using MedTools.Settlements.Web.Endpoints.Groups.InterterritorialSettlements;
-using MedTools.Settlements.Web.Endpoints.Groups.MedicalRegisters;
+﻿using MedTools.Settlements.Web.Endpoints.Groups.InternalSettlemens.MedicalRegisters;
+using MedTools.Settlements.Web.Endpoints.Groups.InterterritorialSettlements;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups;
 
