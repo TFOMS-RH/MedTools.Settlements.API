@@ -138,4 +138,22 @@ public sealed class MedicalRegisterReader(
         return mapper.Map<List<MedicalCaseDto>>(result);
 
     }
+
+    public async Task<PatientDto> GetPatientAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var patientListResult = await dbContext.Set<ProjectionPatient>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetPatient,
+                parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
+            .ToListAsync(cancellationToken);
+
+        var patient = patientListResult.FirstOrDefault() ?? throw new Exception(); //TODO: выкинуть доменную ошибку, чтобы в будущем перехватить ее в глобальном обработчике.
+
+        return mapper.Map<PatientDto>(patient);
+    }
 }

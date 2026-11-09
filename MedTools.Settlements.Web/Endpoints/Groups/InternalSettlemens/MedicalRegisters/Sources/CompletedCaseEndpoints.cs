@@ -1,4 +1,4 @@
-﻿using MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalInvoices;
+﻿using MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.CompletedCases;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlemens.MedicalRegisters.Sources;
 

@@ -15,4 +15,9 @@ public sealed class StoredProcedureSql
         EXEC mt_get_extended_medical_cases 
             @pCompletedCaseUid
         """;
+
+    public const string GetPatient = """
+        EXEC mt_get_patient
+            @pMedicalCaseUid
+        """;
 }

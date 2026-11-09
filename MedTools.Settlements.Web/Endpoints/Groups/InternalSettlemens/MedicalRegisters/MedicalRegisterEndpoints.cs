@@ -12,6 +12,7 @@ public static class MedicalRegisterEndpoints
 
         group.MapMedicalInvoiceEndpoints();
         group.MapCompletedCaseEndpoints();
+        group.MapMedicalCaseEndpoints();
 
         return group;
     }

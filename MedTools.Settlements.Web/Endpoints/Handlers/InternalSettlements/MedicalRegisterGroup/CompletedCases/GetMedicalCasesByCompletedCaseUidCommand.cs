@@ -1,7 +1,7 @@
 ﻿using MedTools.Settlements.Core.Enums;
 using MedTools.Settlements.Application.Services;
 
-namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalInvoices;
+namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.CompletedCases;
 
 public static class GetMedicalCasesByCompletedCaseUidCommand
 {
