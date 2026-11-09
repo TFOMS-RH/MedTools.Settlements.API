@@ -1,6 +1,6 @@
 ﻿namespace MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 
-public sealed record InvoiceDto(
+public sealed record MedicalInvoiceDto(
     int Uid,
     string Number,
     DateTime BillingDate,

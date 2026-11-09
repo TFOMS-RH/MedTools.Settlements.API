@@ -6,7 +6,7 @@ namespace MedTools.Settlements.Application.Services;
 
 public interface IMedicalRegisterReader
 {
-    public Task<PagedResult<InvoiceDto>> GetInvoicePagedResultAsync(
-        GetInvoiceParams @params,
+    public Task<PagedResult<MedicalInvoiceDto>> GetMedicalInvoicesPagedResultAsync(
+        GetMedicalInvoiceParams @params,
         CancellationToken cancellationToken);
 }

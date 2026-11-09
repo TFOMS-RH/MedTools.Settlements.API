@@ -13,11 +13,11 @@ namespace MedTools.Settlements.Infrastructure.Services.Readers;
 public sealed class MedicalRegisterReader(
     MedToolsSettlementsDbContextFactory dbContextFactory) : IMedicalRegisterReader
 {
-    public async Task<PagedResult<InvoiceDto>> GetInvoicePagedResultAsync(
-        GetInvoiceParams @params,
+    public async Task<PagedResult<MedicalInvoiceDto>> GetMedicalInvoicesPagedResultAsync(
+        GetMedicalInvoiceParams @params,
         CancellationToken cancellationToken)
     {
-        await using var dbContext = dbContextFactory.CreateDbContext(@params.RegisterType);
+        var dbContext = dbContextFactory.CreateDbContext(@params.RegisterType);
 
         var baseQuery = dbContext.Set<InvoiceDbEntity>()
             .Where(x => x.MedicalOrganizationCode == @params.MCode
@@ -37,7 +37,7 @@ public sealed class MedicalRegisterReader(
             .OrderBy(x => x.Uid)
             .Skip(@params.PageSize * (@params.Page - 1))
             .Take(@params.PageSize)
-            .Select(x => new InvoiceDto(
+            .Select(x => new MedicalInvoiceDto(
                 Uid: x.Uid,
                 Number: x.InvoiceNumber,
                 BillingDate: x.InvoiceBillingDate,
@@ -46,7 +46,7 @@ public sealed class MedicalRegisterReader(
                 Status: x.MedicalRegistry.Status))
             .ToListAsync(cancellationToken);
 
-        return new PagedResult<InvoiceDto>(
+        return new PagedResult<MedicalInvoiceDto>(
             Values: items,
             TotalRecords: totalRecords);
 
