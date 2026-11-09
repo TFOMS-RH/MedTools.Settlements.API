@@ -2,7 +2,7 @@
 using MedTools.Settlements.Application.Models.Params;
 using MedTools.Settlements.Web.Common.Models.Request;
 
-namespace MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisterGroup.MedicalInvoices;
+namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalInvoices;
 
 public static class GetMedicalInvoicesCommand
 {

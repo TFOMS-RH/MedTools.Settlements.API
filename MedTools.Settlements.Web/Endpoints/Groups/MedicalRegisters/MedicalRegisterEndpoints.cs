@@ -10,7 +10,7 @@ public static class MedicalRegisterEndpoints
         var group = builder.MapGroup("/medical-register")
             .WithTags("Medical Registers");
 
-        group.MapInvoiceEndpoints();
+        group.MapMedicalInvoiceEndpoints();
 
         return group;
     }

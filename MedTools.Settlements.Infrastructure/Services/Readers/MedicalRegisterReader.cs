@@ -1,19 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
+using AutoMapper;
 
 using MedTools.Settlements.Core.Enums;
 
-using MedTools.Settlements.Application.Services;
+using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Models.Params;
 using MedTools.Settlements.Application.Models.Results;
-using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
+
+using MedTools.Settlements.Application.Services;
 
 using MedTools.Settlements.Infrastructure.Services.Factories;
+using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Elements;
+using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.StoredProcedures;
 
 namespace MedTools.Settlements.Infrastructure.Services.Readers;
 
 public sealed class MedicalRegisterReader(
-    MedToolsSettlementsDbContextFactory dbContextFactory) : IMedicalRegisterReader
+    MedToolsSettlementsDbContextFactory dbContextFactory,
+    IMapper mapper) : IMedicalRegisterReader
 {
     public async Task<PagedResult<MedicalInvoiceDto>> GetMedicalInvoicesPagedResultAsync(
         GetMedicalInvoiceParams @params,
@@ -80,5 +87,37 @@ public sealed class MedicalRegisterReader(
             .ToListAsync(cancellationToken);
 
         return medicalInvoiceDetailsList.FirstOrDefault();
+    }
+
+    public async Task<PagedResult<CompletedCaseDto>> GetCompletedCasesAsync(
+        GetCompletedCasesByMedicalInvoiceUidParams @params,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(@params.RegisterType);
+
+        var recordsCount = new SqlParameter(
+            "@total_count",
+            System.Data.SqlDbType.Int)
+        {
+            Direction = System.Data.ParameterDirection.Output
+        };
+
+        var result = await dbContext.Set<ProjectionCompletedCase>()
+            .FromSqlRaw(
+                sql: StoredProcedureNames.GetCompletedCasesByMedicalInvoiceUid,
+                parameters: [
+                        new SqlParameter("@schet_uid", @params.MedicalInvoiceUid),
+                        new SqlParameter("@skip", @params.PageSize * (@params.Page - 1)),
+                        new SqlParameter("@take", @params.PageSize),
+                        new SqlParameter("@search", @params.Search ?? ""),
+                        recordsCount
+                    ])
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<CompletedCaseDto>(
+            Values: mapper.Map<List<CompletedCaseDto>>(result),
+            TotalRecords: recordsCount.Value is int total ? total : 0);
+
     }
 }
