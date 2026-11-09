@@ -2,7 +2,7 @@
 
 namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Elements;
 
-public sealed class InvoiceDbEntity
+public sealed class MedicalInvoiceDbEntity
 {
     public int Uid { get; set; }
     public int MedicalRegistryUid { get; set; }

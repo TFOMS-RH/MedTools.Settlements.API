@@ -7,7 +7,7 @@ public static class MedicalRegisterEndpoints
     public static RouteGroupBuilder MapMedicalRegisterEndpoints(
         this RouteGroupBuilder builder)
     {
-        var group = builder.MapGroup("/medical-registers")
+        var group = builder.MapGroup("/medical-register")
             .WithTags("Medical Registers");
 
         group.MapInvoiceEndpoints();

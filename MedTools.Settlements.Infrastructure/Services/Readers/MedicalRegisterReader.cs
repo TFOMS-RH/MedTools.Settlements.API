@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using MedTools.Settlements.Core.Enums;
+
 using MedTools.Settlements.Application.Services;
 using MedTools.Settlements.Application.Models.Params;
 using MedTools.Settlements.Application.Models.Results;
@@ -19,7 +21,7 @@ public sealed class MedicalRegisterReader(
     {
         var dbContext = dbContextFactory.CreateDbContext(@params.RegisterType);
 
-        var baseQuery = dbContext.Set<InvoiceDbEntity>()
+        var baseQuery = dbContext.Set<MedicalInvoiceDbEntity>()
             .Where(x => x.MedicalOrganizationCode == @params.MCode
                 && x.BillingMonth == @params.BillingMonth
                 && x.BillingYear == @params.BillingYear);
@@ -50,5 +52,33 @@ public sealed class MedicalRegisterReader(
             Values: items,
             TotalRecords: totalRecords);
 
+    }
+
+    public async Task<MedicalInvoiceDetailsDto?> GetMedicalInvoiceDetailsAsync(
+        int medicalInvoiceUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var medicalInvoiceDetailsList = await dbContext.Set<MedicalInvoiceDbEntity>()
+            .AsNoTracking()
+            .Where(x => x.Uid == medicalInvoiceUid)
+            .Select(x => new MedicalInvoiceDetailsDto(
+                InvoiceUid: x.Uid,
+                Filename: x.MedicalRegistry.MedicalRegistryHeading.Filename,
+                InvoiceUploadDate: x.MedicalRegistry.UploadDate,
+                InvoiceAmount: x.InvoiceAmount,
+                ApprovedAmount: x.ApprovedAmount,
+                MedicalEconomicControlPenalty: x.MedicalEconomicControlPenalty,
+                MedicalEconomicExpertisePenalty: x.MedicalEconomicExpertisePenalty,
+                MedicalCareQualityExpertisePenalty: x.MedicalCareQualityExpertisePenalty,
+                InsuranceCompanyApprovedAmount: x.InsuranceCompanyApprovedAmount,
+                InsuranceCompanyMedicalEconomicControlPenalty: x.InsuranceCompanyMedicalEconomicControlPenalty,
+                InsuranceCompanyMedicalEconomicExpertisePenalty: x.InsuranceCompanyMedicalEconomicExpertisePenalty,
+                InsuranceCompanyMedicalCareQualityExpertisePenalty: x.InsuranceCompanyMedicalCareQualityExpertisePenalty))
+            .ToListAsync(cancellationToken);
+
+        return medicalInvoiceDetailsList.FirstOrDefault();
     }
 }

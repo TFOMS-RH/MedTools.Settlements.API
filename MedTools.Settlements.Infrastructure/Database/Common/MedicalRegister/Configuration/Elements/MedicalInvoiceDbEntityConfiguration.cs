@@ -5,9 +5,9 @@ using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models
 
 namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Configuration.Elements;
 
-public sealed class InvoiceDbEntityConfiguration : IEntityTypeConfiguration<InvoiceDbEntity>
+public sealed class MedicalInvoiceDbEntityConfiguration : IEntityTypeConfiguration<MedicalInvoiceDbEntity>
 {
-    public void Configure(EntityTypeBuilder<InvoiceDbEntity> builder)
+    public void Configure(EntityTypeBuilder<MedicalInvoiceDbEntity> builder)
     {
         builder.ToTable("schet").HasKey(entity => entity.Uid);
 
@@ -119,7 +119,7 @@ public sealed class InvoiceDbEntityConfiguration : IEntityTypeConfiguration<Invo
         builder
             .HasOne(invoice => invoice.MedicalRegistry)
             .WithOne(medicalRegistry => medicalRegistry.Invoice)
-            .HasForeignKey<InvoiceDbEntity>(invoice => invoice.MedicalRegistryUid)
+            .HasForeignKey<MedicalInvoiceDbEntity>(invoice => invoice.MedicalRegistryUid)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -12,6 +12,7 @@ public static class MedicalInvoiceEndpoints
             .WithTags("Medtical Invoices");
 
         group.MapGet("/", GetMedicalInvoicesCommand.ExecuteAsync);
+        group.MapGet("/{medicalInvoiceUid:int}", GetMedicalInvoiceDetailsCommand.ExecuteAsync);
 
         return builder;
     }

@@ -12,6 +12,6 @@ public sealed class MedicalRegistryDbEntity
     public short Status { get; set; }
 
     public MedicalRegistryHeadingDbEntity MedicalRegistryHeading { get; set; } = null!;
-    public InvoiceDbEntity Invoice { get; set; } = null!;
+    public MedicalInvoiceDbEntity Invoice { get; set; } = null!;
     public List<MedicalRecordDbEntity> MedicalRecords { get; set; } = [];
 }
