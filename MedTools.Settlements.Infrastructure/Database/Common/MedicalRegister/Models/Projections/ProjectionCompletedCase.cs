@@ -1,4 +1,4 @@
-﻿namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.StoredProcedures;
+﻿namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
 
 public sealed record ProjectionCompletedCase(
     int CompletedCaseUid,

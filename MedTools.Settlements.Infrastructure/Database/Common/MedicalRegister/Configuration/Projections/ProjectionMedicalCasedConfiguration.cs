@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.StoredProcedures;
+using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
 
-namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Configuration.StoredProcedures;
+namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Configuration.Projections;
 
-public sealed class ProjectionMedicalCasedDbEntityConfiguration : IEntityTypeConfiguration<ProjectionMedicalCase>
+public sealed class ProjectionMedicalCasedConfiguration : IEntityTypeConfiguration<ProjectionMedicalCase>
 {
     public void Configure(EntityTypeBuilder<ProjectionMedicalCase> builder)
     {

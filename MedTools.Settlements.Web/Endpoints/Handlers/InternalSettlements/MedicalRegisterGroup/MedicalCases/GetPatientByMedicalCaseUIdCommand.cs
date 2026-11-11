@@ -3,7 +3,7 @@ using MedTools.Settlements.Application.Services;
 
 namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalCases;
 
-public static class GetPatientByMedicalCaseUIdCommand
+public static class GetPatientByMedicalCaseUidCommand
 {
     public static async Task<IResult> ExecuteAsync(
         int medicalCaseUid,
@@ -17,6 +17,8 @@ public static class GetPatientByMedicalCaseUIdCommand
             medicalCaseUid,
             registerType,
             cancellationToken);
+
+        if (patient is null) return Results.NotFound();
 
         return Results.Ok(patient);
     }

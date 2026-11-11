@@ -20,4 +20,14 @@ public sealed class StoredProcedureSql
         EXEC mt_get_patient
             @pMedicalCaseUid
         """;
+
+    public const string GetInsurance = """
+        EXEC mt_rcontrol_get_insurance
+            @pMedicalCaseUid
+        """;
+
+    public const string GetMedicalCaseDetails = """
+        EXEC mt_rcontrol_get_medical_case_details
+            @pMedicalCaseUid
+        """;
 }
