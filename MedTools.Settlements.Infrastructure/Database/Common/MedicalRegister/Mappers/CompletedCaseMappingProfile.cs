@@ -10,5 +10,6 @@ public sealed class CompletedCaseMappingProfile : Profile
     public CompletedCaseMappingProfile()
     {
         CreateMap<ProjectionCompletedCase, CompletedCaseDto>();
+        CreateMap<ProjectionCompletedCaseDetails, CompletedCaseDetailsDto>();
     }
 }

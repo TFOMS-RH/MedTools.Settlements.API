@@ -10,6 +10,12 @@ public static class CompletedCaseEndpoints
             .WithTags("Completed Cases");
 
         group.MapGet(
+                pattern: "/{completedCaseUid:int}",
+                handler: GetCompletedCaseCommand.ExecuteAsync)
+            .WithName("GetCompletedCase")
+            .WithDescription("");
+
+        group.MapGet(
                 pattern: "/{completedCaseUid:int}/medical-cases",
                 handler: GetMedicalCasesByCompletedCaseUidCommand.ExecuteAsync)
             .WithName("GetMedicalCasesByCompletedCaseUid")
