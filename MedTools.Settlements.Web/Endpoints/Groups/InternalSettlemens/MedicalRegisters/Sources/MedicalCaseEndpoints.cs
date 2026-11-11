@@ -29,6 +29,18 @@ public static class MedicalCaseEndpoints
             .WithName("GetInsuranceByMedicalCaseUid")
             .WithDescription("");
 
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/oncology-case",
+                handler: GetOncologyCaseByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetOncologyCaseByMedicalCaseUid")
+            .WithDescription("");
+
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/consultations",
+                handler: GetConsultationsByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetConsultationsByMedicalCaseUid")
+            .WithDescription("");
+
         return builder;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
+﻿using System.Diagnostics.Contracts;
+
+namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 
 public sealed class StoredProcedureSql
 {
@@ -34,5 +36,15 @@ public sealed class StoredProcedureSql
     public const string GetCompletedCaseDetails = """
         EXEC mt_rcontrol_get_completed_case_details
             @pCompletedCaseUid
+        """;
+
+    public const string GetOncologyCase = """
+        EXEC mt_rcontrol_get_oncology_case
+            @pMedicalCaseUid
+        """;
+
+    public const string GetConsultations = """
+        EXEC mt_rcontrol_get_consultations
+            @pMedicalCaseUid
         """;
 }

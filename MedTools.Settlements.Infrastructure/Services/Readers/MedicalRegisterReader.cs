@@ -10,7 +10,6 @@ using MedTools.Settlements.Application.Models.Params;
 using MedTools.Settlements.Application.Models.Results;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 
-
 using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Elements;
@@ -129,14 +128,14 @@ public sealed class MedicalRegisterReader(
     {
         var dbContext = dbContextFactory.CreateDbContext(registerType);
 
-        var completedCaseListResult = await dbContext.Set<ProjectionCompletedCaseDetails>()
+        var result = await dbContext.Set<ProjectionCompletedCaseDetails>()
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetCompletedCaseDetails,
                 parameters: new SqlParameter("@pCompletedCaseUid", completedCaseUid))
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var completedCase = completedCaseListResult.FirstOrDefault();
+        var completedCase = result.FirstOrDefault();
 
         return completedCase is null
             ? null
@@ -168,14 +167,14 @@ public sealed class MedicalRegisterReader(
     {
         var dbContext = dbContextFactory.CreateDbContext(registerType);
 
-        var medicalCaseListResult = await dbContext.Set<ProjectionMedicalCaseDetails>()
+        var result = await dbContext.Set<ProjectionMedicalCaseDetails>()
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetMedicalCaseDetails,
                 parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var medicalCase = medicalCaseListResult.FirstOrDefault();
+        var medicalCase = result.FirstOrDefault();
 
         return medicalCase is null
             ? null
@@ -189,14 +188,14 @@ public sealed class MedicalRegisterReader(
     {
         var dbContext = dbContextFactory.CreateDbContext(registerType);
 
-        var patientListResult = await dbContext.Set<ProjectionPatient>()
+        var result = await dbContext.Set<ProjectionPatient>()
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetPatient,
                 parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
-        var patient = patientListResult.FirstOrDefault();
+        var patient = result.FirstOrDefault();
 
         return patient is null
             ? null
@@ -210,18 +209,55 @@ public sealed class MedicalRegisterReader(
     {
         var dbContext = dbContextFactory.CreateDbContext(registerType);
 
-        var insuranceListResult = await dbContext.Set<ProjectionInsurance>()
+        var result = await dbContext.Set<ProjectionInsurance>()
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetInsurance,
                 parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var insurance = insuranceListResult.FirstOrDefault();
+        var insurance = result.FirstOrDefault();
 
         return insurance is null
             ? null
             : mapper.Map<InsuranceDto>(insurance);
     }
 
+    public async Task<OncologyCaseDto?> GetOncologyCaseAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionOncologyCase>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetOncologyCase,
+                parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        var oncologyCase = result.FirstOrDefault();
+
+        return oncologyCase is null
+            ? null
+            : mapper.Map<OncologyCaseDto>(oncologyCase);
+    }
+
+    public async Task<IReadOnlyCollection<ConsultationDto>> GetConsultationsAsync(
+        int medicalCaseUid, 
+        MedicalRegisterType registerType, 
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionConsultation>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetConsultations,
+                parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return mapper.Map<List<ConsultationDto>>(result);
+    }
 }

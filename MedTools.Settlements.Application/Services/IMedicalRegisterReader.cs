@@ -46,5 +46,14 @@ public interface IMedicalRegisterReader
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
 
+    public Task<OncologyCaseDto?> GetOncologyCaseAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
+
+    public Task<IReadOnlyCollection<ConsultationDto>> GetConsultationsAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
 
 }
