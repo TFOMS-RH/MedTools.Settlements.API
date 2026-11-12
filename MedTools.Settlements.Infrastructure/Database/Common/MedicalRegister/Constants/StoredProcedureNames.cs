@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-
-namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
+﻿namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 
 public sealed class StoredProcedureSql
 {
@@ -47,4 +45,35 @@ public sealed class StoredProcedureSql
         EXEC mt_rcontrol_get_consultations
             @pMedicalCaseUid
         """;
+
+    public const string GetDiagnostics = """
+        EXEC mt_rcontrol_get_diagnostics_records
+            @pOncologyCaseUid
+        """;
+
+    public const string GetContraindications = """
+        EXEC mt_rcontrol_get_contraindications
+            @pOncologyCaseUid
+        """;
+
+    public const string GetOncologyServices = """
+        EXEC mt_rcontrol_get_oncology_services
+            @pOncologyCaseUid
+        """;
+
+    public const string GetMedications = """
+        EXEC mt_rcontrol_get_medications
+            @pOncologyServiceUid
+        """;
+
+    public const string GetInjectionDates = """
+        EXEC mt_rcontrol_get_injection_dates
+            @pMedicationUid
+        """;
+
+    public const string GetInjections = """
+        EXEC mt_rcontrol_get_injections
+            @pMedicationUid
+        """;
+
 }
