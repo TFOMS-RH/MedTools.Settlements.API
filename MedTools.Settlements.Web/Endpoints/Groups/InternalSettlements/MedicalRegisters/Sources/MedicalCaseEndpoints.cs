@@ -11,6 +11,7 @@ public static class MedicalCaseEndpoints
             .MapGroup("/medical-cases")
             .WithTags("Medical Cases");
 
+
         group.MapGet(
                 pattern: "/{medicalCaseUid:int}",
                 handler: GetMedicalCaseCommand.ExecuteAsync)
@@ -39,6 +40,18 @@ public static class MedicalCaseEndpoints
                 pattern: "/{medicalCaseUid:int}/consultations",
                 handler: GetConsultationsByMedicalCaseUidCommand.ExecuteAsync)
             .WithName("GetConsultationsByMedicalCaseUid")
+            .WithDescription("");
+
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/prescriptions",
+                handler: GetPrescriptionsByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetPrescriptionsByMedicalCaseUid")
+            .WithDescription("");
+
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/referrals",
+                handler: GetReferralsByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetReferralsByMedicalCaseUid")
             .WithDescription("");
 
         return builder;

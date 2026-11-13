@@ -5,10 +5,10 @@ using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models
 
 namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Mappers;
 
-public sealed class ProjectionInsuranceMappingProfile : Profile
+public sealed class ReferralMappingProfile : Profile
 {
-    public ProjectionInsuranceMappingProfile()
+    public ReferralMappingProfile()
     {
-        CreateMap<ProjectionInsurance, InsuranceDto>();
+        CreateMap<ProjectionReferral, ReferralDto>();
     }
 }

@@ -85,4 +85,14 @@ public interface IMedicalRegisterReader
         int medicationUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
+
+    public Task<IReadOnlyCollection<PrescriptionDto>> GetPrescriptionsAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
+
+    public Task<IReadOnlyCollection<ReferralDto>> GetReferralsAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
 }

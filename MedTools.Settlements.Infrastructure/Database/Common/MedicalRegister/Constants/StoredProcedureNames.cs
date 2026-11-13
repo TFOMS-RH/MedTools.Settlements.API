@@ -76,4 +76,14 @@ public sealed class StoredProcedureSql
             @pMedicationUid
         """;
 
+    public const string GetPrescriptions = """
+        EXEC mt_rcontrol_get_prescriptions
+            @pMedicalCaseUid
+        """;
+
+    public const string GetReferrals = """
+        EXEC mt_rcontrol_get_referrals
+            @pMedicalCaseUid
+        """;
+
 }

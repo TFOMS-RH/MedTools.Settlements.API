@@ -356,4 +356,38 @@ public sealed class MedicalRegisterReader(
 
         return mapper.Map<List<InjectionDto>>(result);
     }
+
+    public async Task<IReadOnlyCollection<PrescriptionDto>> GetPrescriptionsAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionPrescription>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetPrescriptions,
+                parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return mapper.Map<List<PrescriptionDto>>(result);
+    }
+
+    public async Task<IReadOnlyCollection<ReferralDto>> GetReferralsAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionReferral>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetReferrals,
+                parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return mapper.Map<List<ReferralDto>>(result);
+    }
 }
