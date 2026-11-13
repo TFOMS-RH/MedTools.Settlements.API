@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Data;
+
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 using AutoMapper;
@@ -468,8 +470,8 @@ public sealed class MedicalRegisterReader(
     }
 
     public async Task<IReadOnlyCollection<ProvidedServiceDto>> GetProvidedServicesAsync(
-        int medicalCaseUid, 
-        MedicalRegisterType registerType, 
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
         var dbContext = dbContextFactory.CreateDbContext(registerType);
@@ -481,12 +483,12 @@ public sealed class MedicalRegisterReader(
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        return mapper.Map<List<ProvidedServiceDto>>(result);  
+        return mapper.Map<List<ProvidedServiceDto>>(result);
     }
 
     public async Task<IReadOnlyCollection<MedicalDeviceDto>> GetMedicalDevicesAsync(
-        int providedServiceUid, 
-        MedicalRegisterType registerType, 
+        int providedServiceUid,
+        MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
         var dbContext = dbContextFactory.CreateDbContext(registerType);
@@ -499,5 +501,55 @@ public sealed class MedicalRegisterReader(
             .ToListAsync(cancellationToken: cancellationToken);
 
         return mapper.Map<List<MedicalDeviceDto>>(result);
+    }
+
+    public async Task<PagedResult<DefectDto>> GetDefectsAsync(
+        int medicalCaseUid,
+        int page,
+        int pageSize,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var totalRecords = new SqlParameter(
+            "@totalCount",
+            SqlDbType.Int)
+        {
+            Direction = ParameterDirection.Output
+        };
+
+        var result = await dbContext.Set<ProjectionDefect>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetDefects,
+                parameters: [
+                    new SqlParameter("@pMedicalCaseUid", medicalCaseUid),
+                    new SqlParameter("@pSkip", pageSize * (page - 1)),
+                    new SqlParameter("@pTake", pageSize),
+                    totalRecords])
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return new PagedResult<DefectDto>(
+            Values: mapper.Map<List<DefectDto>>(result),
+            TotalRecords: totalRecords.Value is int total ? total : 0);
+
+    }
+
+    public async Task<IReadOnlyCollection<MedicalSanctionDto>> GetMedicalSanctionsAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionMedicalSanction>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetMedicalSanctions,
+                parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return mapper.Map<List<MedicalSanctionDto>>(result);
     }
 }

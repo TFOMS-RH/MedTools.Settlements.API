@@ -3,6 +3,7 @@
 using MedTools.Settlements.Application.Models.Params;
 using MedTools.Settlements.Application.Models.Results;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace MedTools.Settlements.Application.Services;
 
@@ -123,6 +124,18 @@ public interface IMedicalRegisterReader
 
     public Task<IReadOnlyCollection<MedicalDeviceDto>> GetMedicalDevicesAsync(
         int providedServiceUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
+
+    public Task<PagedResult<DefectDto>> GetDefectsAsync(
+        int medicalCaseUid,
+        int page,
+        int pageSize,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
+
+    public Task<IReadOnlyCollection<MedicalSanctionDto>> GetMedicalSanctionsAsync(
+        int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
 }

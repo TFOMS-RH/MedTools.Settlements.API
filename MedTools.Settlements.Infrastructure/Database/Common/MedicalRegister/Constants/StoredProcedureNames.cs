@@ -115,4 +115,17 @@ public sealed class StoredProcedureSql
         EXEC mt_rcontrol_get_medical_devices
             @pProvidedServiceUid
         """;
+
+    public const string GetDefects = """
+        EXEC mt_rcontrol_get_defects
+            @pMedicalCaseUid,
+            @pSkip,
+            @pTake,
+            @totalCount OUTPUT
+        """;
+
+    public const string GetMedicalSanctions = """
+        EXEC mt_rcontrol_get_medical_sanctions
+            @pMedicalCaseUid
+        """;
 }

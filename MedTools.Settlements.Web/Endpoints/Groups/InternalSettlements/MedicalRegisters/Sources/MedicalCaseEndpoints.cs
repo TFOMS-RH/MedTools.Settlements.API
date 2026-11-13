@@ -72,6 +72,18 @@ public static class MedicalCaseEndpoints
             .WithName("GetProvidedServicesByMedicalCaseUid")
             .WithDescription("");
 
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/defects",
+                handler: GetDefectsByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetDefectsByMedicalCaseUid")
+            .WithDescription("");
+
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/medical-sanctions",
+                handler: GetMedicalSanctionsByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetMedicalSanctionsByMedicalCaseUid")
+            .WithDescription("");
+
         return builder;
     }
 }
