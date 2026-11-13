@@ -106,4 +106,13 @@ public sealed class StoredProcedureSql
             @pClinicalGroupUid
         """;
 
+    public const string GetProvidedServices = """
+        EXEC mt_rcontrol_get_provided_services
+            @pMedicalCaseUid
+        """;
+
+    public const string GetMedicalDevices = """
+        EXEC mt_rcontrol_get_medical_devices
+            @pProvidedServiceUid
+        """;
 }

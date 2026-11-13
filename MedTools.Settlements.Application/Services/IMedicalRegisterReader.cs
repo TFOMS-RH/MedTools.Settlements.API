@@ -115,4 +115,14 @@ public interface IMedicalRegisterReader
         int clinicalGroupUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
+
+    public Task<IReadOnlyCollection<ProvidedServiceDto>> GetProvidedServicesAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
+
+    public Task<IReadOnlyCollection<MedicalDeviceDto>> GetMedicalDevicesAsync(
+        int providedServiceUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
 }

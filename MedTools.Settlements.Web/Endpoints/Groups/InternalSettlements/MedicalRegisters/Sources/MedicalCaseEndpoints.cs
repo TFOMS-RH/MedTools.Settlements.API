@@ -66,6 +66,12 @@ public static class MedicalCaseEndpoints
             .WithName("GetHighTechMedicalCareByMedicalCaseUid")
             .WithDescription("");
 
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/provided-services",
+                handler: GetProvidedServicesByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetProvidedServicesByMedicalCaseUid")
+            .WithDescription("");
+
         return builder;
     }
 }
