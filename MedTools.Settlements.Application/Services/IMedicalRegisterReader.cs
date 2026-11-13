@@ -95,4 +95,24 @@ public interface IMedicalRegisterReader
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
+
+    public Task<ClinicalGroupDto?> GetClinicalGroupAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
+
+    public Task<HighTechMedicalCareDto?> GetHighTechMedicalCareAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
+
+    public Task<IReadOnlyCollection<ClassificationCriterionDto>> GetClassificationCriteriaAsync(
+        int clinicalGroupUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
+
+    public Task<IReadOnlyCollection<TreatmentComplexityCoefficientDto>> GetTreatmentComplexityCoefficientsAsync(
+        int clinicalGroupUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken);
 }

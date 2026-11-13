@@ -390,4 +390,80 @@ public sealed class MedicalRegisterReader(
 
         return mapper.Map<List<ReferralDto>>(result);
     }
+
+    public async Task<ClinicalGroupDto?> GetClinicalGroupAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionClinicalGroup>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetClinicalGroup,
+                parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        var clinicalGroup = result.FirstOrDefault();
+
+        if (clinicalGroup is null) return null;
+
+        return mapper.Map<ClinicalGroupDto>(clinicalGroup);
+    }
+
+    public async Task<HighTechMedicalCareDto?> GetHighTechMedicalCareAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionHighTechMedicalCare>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetHighTechMedicalCare,
+                parameters: new SqlParameter("@pMedicalCaseUid", medicalCaseUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        var highTechMedicalCare = result.FirstOrDefault();
+
+        if (highTechMedicalCare is null) return null;
+
+        return mapper.Map<HighTechMedicalCareDto>(highTechMedicalCare);
+    }
+
+    public async Task<IReadOnlyCollection<ClassificationCriterionDto>> GetClassificationCriteriaAsync(
+        int clinicalGroupUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionClassificationCriterion>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetClassificationCriteria,
+                parameters: new SqlParameter("@pClinicalGroupUid", clinicalGroupUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return mapper.Map<List<ClassificationCriterionDto>>(result);
+    }
+
+    public async Task<IReadOnlyCollection<TreatmentComplexityCoefficientDto>> GetTreatmentComplexityCoefficientsAsync(
+        int clinicalGroupUid,
+        MedicalRegisterType registerType,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextFactory.CreateDbContext(registerType);
+
+        var result = await dbContext.Set<ProjectionTreatmentComplexityCoefficient>()
+            .FromSqlRaw(
+                sql: StoredProcedureSql.GetTreatmentComplexityCoefficients,
+                parameters: new SqlParameter("@pClinicalGroupUid", clinicalGroupUid))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return mapper.Map<List<TreatmentComplexityCoefficientDto>>(result);
+    }
 }

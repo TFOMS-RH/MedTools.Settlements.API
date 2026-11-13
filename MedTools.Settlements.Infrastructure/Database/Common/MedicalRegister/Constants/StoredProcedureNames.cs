@@ -86,4 +86,24 @@ public sealed class StoredProcedureSql
             @pMedicalCaseUid
         """;
 
+    public const string GetClinicalGroup = """
+        EXEC mt_rcontrol_get_clinical_group
+            @pMedicalCaseUid
+        """;
+
+    public const string GetHighTechMedicalCare = """
+        EXEC mt_rcontrol_get_high_tech_medical_care
+            @pMedicalCaseUid
+        """;
+
+    public const string GetClassificationCriteria = """
+        EXEC mt_rcontrol_get_classification_criteria
+            @pClinicalGroupUid
+        """;
+
+    public const string GetTreatmentComplexityCoefficients = """
+        EXEC mt_rcontrol_get_treatment_complexity_coefficients
+            @pClinicalGroupUid
+        """;
+
 }

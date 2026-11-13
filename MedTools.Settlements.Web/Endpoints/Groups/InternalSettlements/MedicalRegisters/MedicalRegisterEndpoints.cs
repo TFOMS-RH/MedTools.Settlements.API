@@ -17,6 +17,7 @@ public static class MedicalRegisterEndpoints
         group.MapOncologyCaseEndpoints();
         group.MapOncologyServiceEndpoints();
         group.MapMedicationEndpoints();
+        group.MapClinicalGroupEndpoints();
 
         return group;
     }

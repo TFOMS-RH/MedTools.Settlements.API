@@ -54,6 +54,18 @@ public static class MedicalCaseEndpoints
             .WithName("GetReferralsByMedicalCaseUid")
             .WithDescription("");
 
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/clinical-group",
+                handler: GetClinicalGroupByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetClinicalGroupByMedicalCaseUid")
+            .WithDescription("");
+
+        group.MapGet(
+                pattern: "/{medicalCaseUid:int}/high-tech-medical-care",
+                handler: GetHighTechMedicalCareByMedicalCaseUidCommand.ExecuteAsync)
+            .WithName("GetHighTechMedicalCareByMedicalCaseUid")
+            .WithDescription("");
+
         return builder;
     }
 }

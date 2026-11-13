@@ -11,5 +11,6 @@ public sealed class MedicalCaseMappingProfile : Profile
     {
         CreateMap<ProjectionMedicalCase, MedicalCaseDto>();
         CreateMap<ProjectionMedicalCaseDetails, MedicalCaseDetailsDto>();
+        CreateMap<ProjectionHighTechMedicalCare, HighTechMedicalCareDto>();
     }
 }
