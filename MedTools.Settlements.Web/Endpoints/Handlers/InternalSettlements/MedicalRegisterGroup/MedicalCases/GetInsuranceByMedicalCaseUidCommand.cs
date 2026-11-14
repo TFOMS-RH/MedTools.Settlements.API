@@ -1,0 +1,25 @@
+﻿using MedTools.Settlements.Core.Enums;
+using MedTools.Settlements.Application.Services;
+
+namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalCases;
+
+public static class GetInsuranceByMedicalCaseUidCommand
+{
+    public static async Task<IResult> ExecuteAsync(
+        int medicalCaseUid,
+        MedicalRegisterType registerType,
+        IMedicalRegisterReader medicalRegisterReader,
+        CancellationToken cancellationToken)
+    {
+        if (medicalCaseUid < 0) return Results.BadRequest();
+
+        var insurance = await medicalRegisterReader.GetInsuranceAsync(
+            medicalCaseUid,
+            registerType,
+            cancellationToken);
+
+        if (insurance is null) return Results.NotFound();
+
+        return Results.Ok(insurance);
+    }
+}

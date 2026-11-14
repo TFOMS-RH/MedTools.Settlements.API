@@ -1,0 +1,27 @@
+﻿namespace MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
+
+public sealed record ProjectionCompletedCaseDetails(
+    string MedicalOrganizationCode,
+    string MedicalOrganizationName,
+    string? ReferringMedicalOrganizationCode,
+    string? ReferringMedicalOrganizationName,
+    DateTime? ReferralDate,
+    int CareConditionCode,
+    string? CareConditionName,
+    int MedicalCareTypeCode,
+    string? MedicalCareTypeName,
+    short PaymentMethodCode,
+    string? PaymentMethodName,
+    byte MedicalCareFormCode,
+    string? MedicalCareFormName,
+    DateTime TreatmentStartDate,
+    DateTime TreatmentEndDate,
+    int? HospitalizationDuration,
+    int HospitalizationOutcomeCode,
+    string? HospitalizationOutcomeName,
+    bool? IsIntrahospitalTransfer,
+    int? ScreeningResult,
+    bool? IsRefusal,
+    bool? IsMobileTeam,
+    int DiseaseOutcomeCode,
+    string? DiseaseOutcomeName);

@@ -1,0 +1,23 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Outgoing.Models;
+
+namespace MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Outgoing.Configuration;
+
+public sealed class ReconciliationActFileHeaderDbEntityConfiguration : IEntityTypeConfiguration<ReconciliationActFileHeader>
+{
+    public void Configure(EntityTypeBuilder<ReconciliationActFileHeader> builder)
+    {
+        builder.ToTable("sver_out_acts_zglv").HasKey(entity => entity.Uid);
+
+        builder.Property(prop => prop.Uid).HasColumnName("uid");
+        builder.Property(prop => prop.ReconciliationActFileRootUid).HasColumnName("sver_out_acts_zl_list_uid");
+        builder.Property(prop => prop.Version).HasColumnName("version").IsRequired(false);
+        builder.Property(prop => prop.FileDate).HasColumnName("data").IsRequired(false);
+        builder.Property(prop => prop.Filename).HasColumnName("filename").IsRequired(false);
+
+        builder.HasOne(reconciliationActFileHeader => reconciliationActFileHeader.ReconciliationActFileRoot)
+            .WithOne(reconciliationActFileRoot => reconciliationActFileRoot.Header)
+            .HasForeignKey<ReconciliationActFileHeader>(reconciliationActFileHeader => reconciliationActFileHeader.ReconciliationActFileRootUid);
+    }
+}

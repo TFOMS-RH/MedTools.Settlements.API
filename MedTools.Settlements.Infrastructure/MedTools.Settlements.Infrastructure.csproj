@@ -7,14 +7,21 @@
 	</PropertyGroup>
 
 	<ItemGroup Label="Projects">
-		<ProjectReference Include="..\MedTools.Settlements.Domain\MedTools.Settlements.Domain.csproj" />
+		<ProjectReference Include="..\MedTools.Settlements.Core\MedTools.Settlements.Core.csproj" />
 		<ProjectReference Include="..\MedTools.Settlements.Application\MedTools.Settlements.Application.csproj" />
 	</ItemGroup>
 
 	<ItemGroup Label="Frameworks">
+		<PackageReference Include="AutoMapper" Version="16.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
 		<PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Common\Schemas\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 </Project>
