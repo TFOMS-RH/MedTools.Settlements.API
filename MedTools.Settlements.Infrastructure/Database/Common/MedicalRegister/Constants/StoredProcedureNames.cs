@@ -4,11 +4,11 @@ public sealed class StoredProcedureSql
 {
     public const string GetCompletedCasesByMedicalInvoiceUid = """
         EXEC mt_get_extended_completed_cases 
-            @schet_uid, 
-            @skip, 
-            @take, 
-            @search, 
-            @total_count OUTPUT
+            @pMedicalInvoiceUid, 
+            @pSkip, 
+            @pTake, 
+            @pSearch, 
+            @pTotalRecords OUTPUT
         """;
 
     public const string GetMedicalCasesByCompletedCaseUid = """
