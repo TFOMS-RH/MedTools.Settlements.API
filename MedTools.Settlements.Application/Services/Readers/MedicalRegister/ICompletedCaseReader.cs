@@ -12,7 +12,7 @@ public interface ICompletedCaseReader
         GetCompletedCasesByMedicalInvoiceUidParams @params,
         CancellationToken cancellationToken);
 
-    public Task<CompletedCaseDetailsDto?> GetCompletedCaseAsync(
+    public Task<CompletedCaseDetailsDto> GetCompletedCaseAsync(
         int completedCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);

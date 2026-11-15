@@ -6,7 +6,7 @@ namespace MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
 public interface IOncologyReader
 {
-    public Task<OncologyCaseDto?> GetOncologyCaseAsync(
+    public Task<OncologyCaseDto> GetOncologyCaseAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);

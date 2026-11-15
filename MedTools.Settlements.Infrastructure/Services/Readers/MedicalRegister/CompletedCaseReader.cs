@@ -13,6 +13,7 @@ using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
+using MedTools.Settlements.Application.Common.Exceptions;
 
 namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
@@ -52,7 +53,7 @@ public sealed class CompletedCaseReader(
 
     }
 
-    public async Task<CompletedCaseDetailsDto?> GetCompletedCaseAsync(
+    public async Task<CompletedCaseDetailsDto> GetCompletedCaseAsync(
         int completedCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
@@ -66,10 +67,11 @@ public sealed class CompletedCaseReader(
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var completedCase = result.FirstOrDefault();
+        var completedCase = result.FirstOrDefault()
+            ?? throw new EntityNotFoundException(
+                $"Не удалось найти детали законченного случая с UID {completedCaseUid}");
 
-        return completedCase is null
-            ? null
-            : mapper.Map<CompletedCaseDetailsDto>(completedCase);
+
+        return mapper.Map<CompletedCaseDetailsDto>(completedCase);
     }
 }

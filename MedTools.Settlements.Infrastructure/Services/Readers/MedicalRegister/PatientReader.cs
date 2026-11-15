@@ -5,6 +5,7 @@ using AutoMapper;
 
 using MedTools.Settlements.Core.Enums;
 
+using MedTools.Settlements.Application.Common.Exceptions;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
@@ -19,7 +20,7 @@ public sealed class PatientReader(
     MedToolsSettlementsDbContextFactory dbContextFactory,
     IMapper mapper) : IPatientReader
 {
-    public async Task<PatientDto?> GetPatientAsync(
+    public async Task<PatientDto> GetPatientAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
@@ -33,14 +34,14 @@ public sealed class PatientReader(
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
-        var patient = result.FirstOrDefault();
+        var patient = result.FirstOrDefault() ??
+            throw new EntityNotFoundException(
+                $"Не удалось найти пациента внутри мед. случая с UID {medicalCaseUid}");
 
-        return patient is null
-            ? null
-            : mapper.Map<PatientDto>(patient);
+        return mapper.Map<PatientDto>(patient);
     }
 
-    public async Task<InsuranceDto?> GetInsuranceAsync(
+    public async Task<InsuranceDto> GetInsuranceAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
@@ -54,10 +55,10 @@ public sealed class PatientReader(
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var insurance = result.FirstOrDefault();
+        var insurance = result.FirstOrDefault() ??
+            throw new EntityNotFoundException(
+                $"Не удалось найти СМО внутри мед. случая с UID {medicalCaseUid}");
 
-        return insurance is null
-            ? null
-            : mapper.Map<InsuranceDto>(insurance);
+        return mapper.Map<InsuranceDto>(insurance);
     }
 }

@@ -11,6 +11,7 @@ using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
+using MedTools.Settlements.Application.Common.Exceptions;
 
 namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
@@ -52,7 +53,7 @@ public class MedicalCareReader(
         return mapper.Map<List<ReferralDto>>(result);
     }
 
-    public async Task<ClinicalGroupDto?> GetClinicalGroupAsync(
+    public async Task<ClinicalGroupDto> GetClinicalGroupAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
@@ -66,14 +67,14 @@ public class MedicalCareReader(
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var clinicalGroup = result.FirstOrDefault();
-
-        if (clinicalGroup is null) return null;
+        var clinicalGroup = result.FirstOrDefault()
+            ?? throw new EntityNotFoundException(
+                $"Не удалось найти КСГ внутри мед. случая с UID {medicalCaseUid}");
 
         return mapper.Map<ClinicalGroupDto>(clinicalGroup);
     }
 
-    public async Task<HighTechMedicalCareDto?> GetHighTechMedicalCareAsync(
+    public async Task<HighTechMedicalCareDto> GetHighTechMedicalCareAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
@@ -88,8 +89,6 @@ public class MedicalCareReader(
             .ToListAsync(cancellationToken: cancellationToken);
 
         var highTechMedicalCare = result.FirstOrDefault();
-
-        if (highTechMedicalCare is null) return null;
 
         return mapper.Map<HighTechMedicalCareDto>(highTechMedicalCare);
     }

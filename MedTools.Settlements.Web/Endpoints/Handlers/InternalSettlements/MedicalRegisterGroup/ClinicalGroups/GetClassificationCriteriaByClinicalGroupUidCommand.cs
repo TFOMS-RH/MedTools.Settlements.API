@@ -1,6 +1,6 @@
 ﻿using MedTools.Settlements.Core.Enums;
-
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
+using MedTools.Settlements.Web.Common.Extensions;
 
 namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.ClinicalGroups;
 
@@ -12,12 +12,32 @@ public static class GetClassificationCriteriaByClinicalGroupUidCommand
         IMedicalCareReader reader,
         CancellationToken cancellationToken)
     {
-        if (clinicalGroupUid <= 0) return Results.BadRequest();
+        var errors = new Dictionary<string, string[]>();
 
-        var classificationCriteria = await reader.GetClassificationCriteriaAsync(
-            clinicalGroupUid,
-            registerType,
-            cancellationToken);
+        if (clinicalGroupUid <= 0)
+        {
+            errors.AddError(
+                "clinicalGroupUid", 
+                "UID должен быть больше 0.");
+        }
+
+        if (!Enum.IsDefined(registerType))
+        {
+            errors.AddError(
+                "registerType", 
+                "Недопустимый тип медицинского реестра.");
+        }
+
+        if (errors.Count > 0)
+        {
+            return Results.ValidationProblem(errors);
+        }
+
+        var classificationCriteria = await reader
+            .GetClassificationCriteriaAsync(
+                clinicalGroupUid,
+                registerType,
+                cancellationToken);
 
         return Results.Ok(classificationCriteria);
     }

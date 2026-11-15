@@ -1,6 +1,6 @@
 ﻿using MedTools.Settlements.Core.Enums;
-
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
+using MedTools.Settlements.Web.Common.Extensions;
 
 namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalCases;
 
@@ -12,14 +12,32 @@ public static class GetInsuranceByMedicalCaseUidCommand
         IPatientReader reader,
         CancellationToken cancellationToken)
     {
-        if (medicalCaseUid < 0) return Results.BadRequest();
+        var errors = new Dictionary<string, string[]>();
 
-        var insurance = await reader.GetInsuranceAsync(
-            medicalCaseUid,
-            registerType,
-            cancellationToken);
+        if (medicalCaseUid <= 0)
+        {
+            errors.AddError(
+                "medicalCaseUid",
+                "UID должен быть больше 0.");
+        }
 
-        if (insurance is null) return Results.NotFound();
+        if (!Enum.IsDefined(registerType))
+        {
+            errors.AddError(
+                "registerType",
+                "Недопустимый тип медицинского реестра.");
+        }
+
+        if (errors.Count > 0)
+        {
+            return Results.ValidationProblem(errors);
+        }
+
+        var insurance = await reader
+            .GetInsuranceAsync(
+                medicalCaseUid,
+                registerType,
+                cancellationToken);
 
         return Results.Ok(insurance);
     }

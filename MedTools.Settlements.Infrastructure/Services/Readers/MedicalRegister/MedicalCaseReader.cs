@@ -11,6 +11,7 @@ using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
+using MedTools.Settlements.Application.Common.Exceptions;
 
 namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
@@ -37,7 +38,7 @@ public class MedicalCaseReader(
 
     }
 
-    public async Task<MedicalCaseDetailsDto?> GetMedicalCaseAsync(
+    public async Task<MedicalCaseDetailsDto> GetMedicalCaseAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
@@ -51,10 +52,10 @@ public class MedicalCaseReader(
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var medicalCase = result.FirstOrDefault();
+        var medicalCase = result.FirstOrDefault() ??
+            throw new EntityNotFoundException(
+                $"Не удалось получить мед. случай с UID {medicalCaseUid}");
 
-        return medicalCase is null
-            ? null
-            : mapper.Map<MedicalCaseDetailsDto>(medicalCase);
+        return mapper.Map<MedicalCaseDetailsDto>(medicalCase);
     }
 }

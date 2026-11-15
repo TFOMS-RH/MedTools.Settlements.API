@@ -47,6 +47,7 @@ public class MegaPrograma
         var app = builder.Build();
 
         app.UseRouting();
+        app.UseExceptionHandler();
         app.MapSettlementsEndpoints();
         
         await app.RunAsync();

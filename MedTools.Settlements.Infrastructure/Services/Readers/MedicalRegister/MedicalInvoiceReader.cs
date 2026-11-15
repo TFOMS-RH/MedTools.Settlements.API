@@ -9,6 +9,7 @@ using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
 using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Elements;
+using MedTools.Settlements.Application.Common.Exceptions;
 
 namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
@@ -55,7 +56,7 @@ public sealed class MedicalInvoiceReader(
 
     }
 
-    public async Task<MedicalInvoiceDetailsDto?> GetMedicalInvoiceDetailsAsync(
+    public async Task<MedicalInvoiceDetailsDto> GetMedicalInvoiceDetailsAsync(
         int medicalInvoiceUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
@@ -78,7 +79,9 @@ public sealed class MedicalInvoiceReader(
                 InsuranceCompanyMedicalEconomicControlPenalty: x.InsuranceCompanyMedicalEconomicControlPenalty,
                 InsuranceCompanyMedicalEconomicExpertisePenalty: x.InsuranceCompanyMedicalEconomicExpertisePenalty,
                 InsuranceCompanyMedicalCareQualityExpertisePenalty: x.InsuranceCompanyMedicalCareQualityExpertisePenalty))
-            .SingleOrDefaultAsync(cancellationToken);
+            .SingleOrDefaultAsync(cancellationToken) ??
+                throw new EntityNotFoundException(
+                    $"Не удалось получить детали мед. счета с UID {medicalInvoiceUid}");
 
         return medicalInvoiceDetails;
     }

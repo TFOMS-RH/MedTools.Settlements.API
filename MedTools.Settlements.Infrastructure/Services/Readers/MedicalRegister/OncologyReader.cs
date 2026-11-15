@@ -5,6 +5,7 @@ using AutoMapper;
 
 using MedTools.Settlements.Core.Enums;
 
+using MedTools.Settlements.Application.Common.Exceptions;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
@@ -19,7 +20,7 @@ public sealed class OncologyReader(
     MedToolsSettlementsDbContextFactory dbContextFactory,
     IMapper mapper) : IOncologyReader
 {
-    public async Task<OncologyCaseDto?> GetOncologyCaseAsync(
+    public async Task<OncologyCaseDto> GetOncologyCaseAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
@@ -33,11 +34,11 @@ public sealed class OncologyReader(
             .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var oncologyCase = result.FirstOrDefault();
+        var oncologyCase = result.FirstOrDefault() ??
+            throw new EntityNotFoundException(
+                $"Не удалось найти онкологический случай внутри мед. случая с UID {medicalCaseUid}");
 
-        return oncologyCase is null
-            ? null
-            : mapper.Map<OncologyCaseDto>(oncologyCase);
+        return mapper.Map<OncologyCaseDto>(oncologyCase);
     }
 
     public async Task<IReadOnlyCollection<ConsultationDto>> GetConsultationsAsync(

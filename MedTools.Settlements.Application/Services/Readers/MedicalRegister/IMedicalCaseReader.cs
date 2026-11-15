@@ -11,7 +11,7 @@ public interface IMedicalCaseReader
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
 
-    public Task<MedicalCaseDetailsDto?> GetMedicalCaseAsync(
+    public Task<MedicalCaseDetailsDto> GetMedicalCaseAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);

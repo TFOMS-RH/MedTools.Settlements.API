@@ -16,12 +16,12 @@ public interface IMedicalCareReader
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
 
-    public Task<ClinicalGroupDto?> GetClinicalGroupAsync(
+    public Task<ClinicalGroupDto> GetClinicalGroupAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
 
-    public Task<HighTechMedicalCareDto?> GetHighTechMedicalCareAsync(
+    public Task<HighTechMedicalCareDto> GetHighTechMedicalCareAsync(
         int medicalCaseUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);

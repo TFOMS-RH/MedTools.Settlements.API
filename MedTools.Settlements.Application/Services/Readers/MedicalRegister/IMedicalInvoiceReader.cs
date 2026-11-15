@@ -12,7 +12,7 @@ public interface IMedicalInvoiceReader
         GetMedicalInvoiceParams @params,
         CancellationToken cancellationToken);
 
-    public Task<MedicalInvoiceDetailsDto?> GetMedicalInvoiceDetailsAsync(
+    public Task<MedicalInvoiceDetailsDto> GetMedicalInvoiceDetailsAsync(
         int medicalInvoiceUid,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
