@@ -1,5 +1,6 @@
 ﻿using MedTools.Settlements.Core.Enums;
-using MedTools.Settlements.Application.Services;
+
+using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
 namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.CompletedCases;
 
@@ -8,12 +9,12 @@ public static class GetCompletedCaseCommand
     public static async Task<IResult> ExecuteAsync(
         int completedCaseUid,
         MedicalRegisterType registerType,
-        IMedicalRegisterReader medicalRegisterReader,
+        ICompletedCaseReader reader,
         CancellationToken cancellationToken)
     {
         if (completedCaseUid < 0) return Results.BadRequest();
 
-        var completedCase = await medicalRegisterReader.GetCompletedCaseAsync(
+        var completedCase = await reader.GetCompletedCaseAsync(
             completedCaseUid,
             registerType,
             cancellationToken);

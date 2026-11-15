@@ -1,5 +1,6 @@
-﻿using MedTools.Settlements.Application.Services;
-using MedTools.Settlements.Core.Enums;
+﻿using MedTools.Settlements.Core.Enums;
+
+using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
 namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalCases;
 
@@ -10,7 +11,7 @@ public static class GetDefectsByMedicalCaseUidCommand
         int page,
         int pageSize,
         MedicalRegisterType registerType,
-        IMedicalRegisterReader medicalRegisterReader,
+        IMedicalControlReader reader,
         CancellationToken cancellationToken)
     {
         if (page < 0
@@ -18,7 +19,7 @@ public static class GetDefectsByMedicalCaseUidCommand
             || pageSize > 100
             || medicalCaseUid <= 0) return Results.BadRequest();
 
-        var defects = await medicalRegisterReader.GetDefectsAsync(
+        var defects = await reader.GetDefectsAsync(
             medicalCaseUid,
             page,
             pageSize,

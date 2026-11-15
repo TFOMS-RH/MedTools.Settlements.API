@@ -1,5 +1,6 @@
-﻿using MedTools.Settlements.Application.Services;
-using MedTools.Settlements.Core.Enums;
+﻿using MedTools.Settlements.Core.Enums;
+
+using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
 namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.OncologyCases;
 
@@ -8,12 +9,12 @@ public static class GetContraindicationsByOncologyCaseUidCommand
     public static async Task<IResult> ExecuteAsync(
         int oncologyCaseUid,
         MedicalRegisterType registerType,
-        IMedicalRegisterReader medicalRegisterReader,
+        IOncologyReader reader,
         CancellationToken cancellationToken)
     {
         if (oncologyCaseUid < 0) return Results.BadRequest();
 
-        var contraindications = await medicalRegisterReader.GetContraindicationsAsync(
+        var contraindications = await reader.GetContraindicationsAsync(
             oncologyCaseUid,
             registerType,
             cancellationToken);
