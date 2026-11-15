@@ -27,7 +27,7 @@ public sealed class CompletedCaseReader(
         var dbContext = dbContextFactory.CreateDbContext(@params.RegisterType);
 
         var recordsCount = new SqlParameter(
-            "@total_count",
+            "@pTotalRecords",
             System.Data.SqlDbType.Int)
         {
             Direction = System.Data.ParameterDirection.Output
@@ -37,10 +37,10 @@ public sealed class CompletedCaseReader(
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetCompletedCasesByMedicalInvoiceUid,
                 parameters: [
-                        new SqlParameter("@schet_uid", @params.MedicalInvoiceUid),
-                        new SqlParameter("@skip", @params.PageSize * (@params.Page - 1)),
-                        new SqlParameter("@take", @params.PageSize),
-                        new SqlParameter("@search", @params.Search ?? ""),
+                        new SqlParameter("@pMedicalInvoiceUid", @params.MedicalInvoiceUid),
+                        new SqlParameter("@pSkip", @params.PageSize * (@params.Page - 1)),
+                        new SqlParameter("@pTake", @params.PageSize),
+                        new SqlParameter("@pSearch", @params.Search ?? ""),
                         recordsCount
                     ])
             .AsNoTracking()
