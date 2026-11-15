@@ -45,9 +45,9 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
                 x => !string.IsNullOrWhiteSpace(x.MTR.ConnectionString)
                 && !string.IsNullOrWhiteSpace(x.SMODB18.ConnectionString)
                 && !string.IsNullOrWhiteSpace(x.INOGOROD18.ConnectionString)
-                && x.MTR.Timeout != 0
-                && x.SMODB18.Timeout != 0
-                && x.INOGOROD18.Timeout != 0)
+                && x.MTR.Timeout > 0
+                && x.SMODB18.Timeout > 0
+                && x.INOGOROD18.Timeout > 0)
             .ValidateOnStart();
     }
 
