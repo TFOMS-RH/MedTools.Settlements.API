@@ -14,5 +14,6 @@ public static class MedToolsSettlementsWebServiceCollectionExtensions
         IServiceCollection services)
     {
         services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddProblemDetails();
     }
 }

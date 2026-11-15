@@ -37,6 +37,20 @@ public static class GetMedicalInvoicesCommand
                 "Размер страницы должен быть в промежутке между 1 и 100.");
         }
 
+        if(request.Month < 1 ||  request.Month > 12)
+        {
+            errors.AddError(
+                "month",
+                "Номер месяца может быть только в диапозоне от 1 до 12.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.MedicalOrganizationCode))
+        {
+            errors.AddError(
+                "medicalOrganizationCode",
+                "Код организации не может быть пустым.");
+        }
+
         if (errors.Count > 0)
         {
             return Results.ValidationProblem(errors);

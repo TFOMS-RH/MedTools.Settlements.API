@@ -19,7 +19,7 @@ public static class GetCompletedCasesByMedicalInvoiceUidCommand
         if (medicalInvoiceUid <= 0)
         {
             errors.AddError(
-                "medicalCaseUid",
+                "medicalInvoiceUid",
                 "UID должен быть больше 0.");
         }
 
