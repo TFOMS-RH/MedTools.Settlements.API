@@ -41,8 +41,13 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
     {
         services.AddOptions<DatabaseOption>()
             .Bind(configuration.GetSection(DatabaseOption.SectionName))
-            .Validate(x => !string.IsNullOrWhiteSpace(x.MTR.ConnectionString)
-                && x.MTR.Timeout != 0)
+            .Validate(
+                x => !string.IsNullOrWhiteSpace(x.MTR.ConnectionString)
+                && !string.IsNullOrWhiteSpace(x.SMODB18.ConnectionString)
+                && !string.IsNullOrWhiteSpace(x.INOGOROD18.ConnectionString)
+                && x.MTR.Timeout != 0
+                && x.SMODB18.Timeout != 0
+                && x.INOGOROD18.Timeout != 0)
             .ValidateOnStart();
     }
 
