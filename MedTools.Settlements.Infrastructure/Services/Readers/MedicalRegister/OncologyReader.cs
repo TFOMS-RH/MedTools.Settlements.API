@@ -67,6 +67,7 @@ public sealed class OncologyReader(
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetDiagnostics,
                 parameters: new SqlParameter("@pOncologyCaseUid", oncologyCaseUid))
+            .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
         return mapper.Map<List<DiagnosticDto>>(result);
@@ -83,6 +84,7 @@ public sealed class OncologyReader(
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetContraindications,
                 parameters: new SqlParameter("@pOncologyCaseUid", oncologyCaseUid))
+            .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
         return mapper.Map<List<ContraindicationDto>>(result);
@@ -99,6 +101,7 @@ public sealed class OncologyReader(
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetOncologyServices,
                 parameters: new SqlParameter("@pOncologyCaseUid", oncologyCaseUid))
+            .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
         return mapper.Map<List<OncologyServiceDto>>(result);
@@ -115,6 +118,7 @@ public sealed class OncologyReader(
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetMedications,
                 parameters: new SqlParameter("@pOncologyServiceUid", oncologyServiceUid))
+            .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
         return mapper.Map<List<MedicationDto>>(result);
@@ -131,6 +135,7 @@ public sealed class OncologyReader(
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetInjectionDates,
                 parameters: new SqlParameter("@pMedicationUid", medicationUid))
+            .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
         return mapper.Map<List<InjectionDateDto>>(result);
@@ -147,6 +152,7 @@ public sealed class OncologyReader(
             .FromSqlRaw(
                 sql: StoredProcedureSql.GetInjections,
                 parameters: new SqlParameter("@pMedicationUid", medicationUid))
+            .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
         return mapper.Map<List<InjectionDto>>(result);
