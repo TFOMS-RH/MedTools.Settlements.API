@@ -9,4 +9,4 @@ public sealed record GetMedicalInvoicesRequest(
     int Page,
     int PageSize,
     string? Search,
-    MedicalRegisterType MedicalRegisterType);
+    MedicalRegisterType RegisterType);

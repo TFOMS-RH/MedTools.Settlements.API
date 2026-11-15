@@ -4,9 +4,9 @@ using MedTools.Settlements.Application.Imports.Commands;
 
 namespace MedTools.Settlements.Application.DI;
 
-public static class MedToolsSettlementApplicationServiceCollectionExtensions
+public static class MedToolsSettlementsApplicationServiceCollectionExtensions
 {
-    public static IServiceCollection AddMedToolsSettlementApplicationServices(
+    public static IServiceCollection AddMedToolsSettlementsApplicationServices(
         this IServiceCollection services)
     {
         RegisterCommands(services);

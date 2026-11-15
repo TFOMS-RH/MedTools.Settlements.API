@@ -1,5 +1,7 @@
-﻿using MedTools.Settlements.Application.Services;
-using MedTools.Settlements.Core.Enums;
+﻿using MedTools.Settlements.Core.Enums;
+using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
+using MedTools.Settlements.Web.Common.Extensions;
+using MedTools.Settlements.Web.Common.Constants;
 
 namespace MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalCases;
 
@@ -10,20 +12,52 @@ public static class GetDefectsByMedicalCaseUidCommand
         int page,
         int pageSize,
         MedicalRegisterType registerType,
-        IMedicalRegisterReader medicalRegisterReader,
+        IMedicalControlReader reader,
         CancellationToken cancellationToken)
     {
-        if (page < 0
-            || pageSize < 0
-            || pageSize > 100
-            || medicalCaseUid <= 0) return Results.BadRequest();
+        var errors = new Dictionary<string, string[]>();
 
-        var defects = await medicalRegisterReader.GetDefectsAsync(
-            medicalCaseUid,
-            page,
-            pageSize,
-            registerType,
-            cancellationToken);
+        if (medicalCaseUid <= 0)
+        {
+            errors.AddError(
+                "medicalCaseUid",
+                "UID должен быть больше 0.");
+        }
+
+        if (!Enum.IsDefined(registerType))
+        {
+            errors.AddError(
+                "registerType",
+                "Недопустимый тип медицинского реестра.");
+        }
+
+        if (page < PaginationConstants.MinPage)
+        {
+            errors.AddError(
+                "page",
+                "Текущая страница должна быть больше 0.");
+        }
+
+        if (pageSize < PaginationConstants.MinPageSize
+            || pageSize > PaginationConstants.MaxPageSize)
+        {
+            errors.AddError(
+                "pageSize",
+                "Размер страницы должен быть в промежутке между 1 и 100.");
+        }
+
+        if (errors.Count > 0)
+        {
+            return Results.ValidationProblem(errors);
+        }
+
+        var defects = await reader
+            .GetDefectsAsync(
+                medicalCaseUid,
+                page,
+                pageSize,
+                registerType,
+                cancellationToken);
 
         return Results.Ok(defects);
 

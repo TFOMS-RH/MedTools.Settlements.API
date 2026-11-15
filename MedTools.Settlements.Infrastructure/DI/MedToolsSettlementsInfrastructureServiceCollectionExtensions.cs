@@ -1,26 +1,27 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using MedTools.Settlements.Application.Services;
+using MedTools.Settlements.Application.Models.XML.ReconciliationAct;
+using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
+
 using MedTools.Settlements.Infrastructure.Services;
 using MedTools.Settlements.Infrastructure.Common.Options;
-using MedTools.Settlements.Infrastructure.Services.Readers;
-using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Services.Repositories;
-using MedTools.Settlements.Application.Models.XML.ReconciliationAct;
 using MedTools.Settlements.Infrastructure.Database.InternalSettlements.Contexts;
 using MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Contexts;
+using MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 using Incoming = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Incoming;
 using Outgoing = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Outgoing;
 
 namespace MedTools.Settlements.Infrastructure.DI;
 
-public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
+public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
 {
-    public static IServiceCollection AddMedToolsInfrastructureSettlementsServices(
+    public static IServiceCollection AddMedToolsSettlementsInfrastructureServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -29,6 +30,7 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
         RegisterMappers(services);
         RegisterRepositories(services);
         RegisterInternalServices(services);
+        RegisterReaders(services);
 
         return services;
     }
@@ -39,8 +41,13 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
     {
         services.AddOptions<DatabaseOption>()
             .Bind(configuration.GetSection(DatabaseOption.SectionName))
-            .Validate(x => !string.IsNullOrWhiteSpace(x.MTR.ConnectionString)
-                && x.MTR.Timeout != 0)
+            .Validate(
+                x => !string.IsNullOrWhiteSpace(x.MTR.ConnectionString)
+                && !string.IsNullOrWhiteSpace(x.SMODB18.ConnectionString)
+                && !string.IsNullOrWhiteSpace(x.INOGOROD18.ConnectionString)
+                && x.MTR.Timeout > 0
+                && x.SMODB18.Timeout > 0
+                && x.INOGOROD18.Timeout > 0)
             .ValidateOnStart();
     }
 
@@ -88,6 +95,18 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
             });
     }
 
+    private static void RegisterReaders(IServiceCollection services)
+    {
+        services.AddScoped<ICompletedCaseReader, CompletedCaseReader>();
+        services.AddScoped<IMedicalCareReader, MedicalCareReader>();
+        services.AddScoped<IMedicalCaseReader, MedicalCaseReader>();
+        services.AddScoped<IMedicalControlReader, MedicalControlReader>();
+        services.AddScoped<IMedicalInvoiceReader, MedicalInvoiceReader>();
+        services.AddScoped<IMedicalServiceReader, MedicalServiceReader>();
+        services.AddScoped<IOncologyReader, OncologyReader>();
+        services.AddScoped<IPatientReader, PatientReader>();
+    }
+
     private static void RegisterMappers(IServiceCollection services)
     {
         services.AddAutoMapper(config => { },
@@ -106,8 +125,7 @@ public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
         services.AddSingleton<XmlSchemaProvider>();
         services.AddSingleton<IXmlFileValidationService, XmlFileValidationService>();
 
-        services.AddScoped<IMedicalRegisterReader, MedicalRegisterReader>();
         services.AddScoped<IActsImportService, ActsImportService>();
-        services.AddScoped<MedToolsSettlementsDbContextFactory>();
+        services.AddScoped<MedicalRegisterDbContextResolver>();
     }
 }
