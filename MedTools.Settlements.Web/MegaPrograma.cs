@@ -6,6 +6,7 @@ using Serilog;
 
 using MedTools.Settlements.Application.DI;
 using MedTools.Settlements.Infrastructure.DI;
+using MedTools.Settlements.Web.DI;
 using MedTools.Settlements.Web.Endpoints.Groups;
 
 namespace MedTools.Settlements.Web;
@@ -27,8 +28,9 @@ public class MegaPrograma
 
         var builder = WebApplication.CreateBuilder();
 
-        builder.Services.AddMedToolsSettlementApplicationServices();
-        builder.Services.AddMedToolsInfrastructureSettlementsServices(builder.Configuration);
+        builder.Services.AddMedToolsSettlementsApplicationServices();
+        builder.Services.AddMedToolsSettlementsInfrastructureServices(builder.Configuration);
+        builder.Services.AddMedToolsSettlementsWebServices();
         builder.Services.Configure<FormOptions>(
             options =>
             {
@@ -49,7 +51,7 @@ public class MegaPrograma
         app.UseRouting();
         app.UseExceptionHandler();
         app.MapSettlementsEndpoints();
-        
+
         await app.RunAsync();
     }
 }

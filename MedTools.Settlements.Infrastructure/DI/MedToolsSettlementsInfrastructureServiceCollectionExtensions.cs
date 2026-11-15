@@ -20,9 +20,9 @@ using Outgoing = MedTools.Settlements.Infrastructure.Database.InterterritorialSe
 
 namespace MedTools.Settlements.Infrastructure.DI;
 
-public static class MedToolsSettlementInfrastructureServiceCollectionExtensions
+public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
 {
-    public static IServiceCollection AddMedToolsInfrastructureSettlementsServices(
+    public static IServiceCollection AddMedToolsSettlementsInfrastructureServices(
         this IServiceCollection services,
         IConfiguration configuration)
     {
