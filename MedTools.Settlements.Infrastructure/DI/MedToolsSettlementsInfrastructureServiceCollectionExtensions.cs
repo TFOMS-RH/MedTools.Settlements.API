@@ -9,7 +9,6 @@ using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
 using MedTools.Settlements.Infrastructure.Services;
 using MedTools.Settlements.Infrastructure.Common.Options;
-using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Services.Repositories;
 using MedTools.Settlements.Infrastructure.Database.InternalSettlements.Contexts;
 using MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Contexts;
@@ -122,6 +121,6 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
         services.AddSingleton<IXmlFileValidationService, XmlFileValidationService>();
 
         services.AddScoped<IActsImportService, ActsImportService>();
-        services.AddScoped<MedToolsSettlementsDbContextFactory>();
+        services.AddScoped<MedicalRegisterDbContextResolver>();
     }
 }

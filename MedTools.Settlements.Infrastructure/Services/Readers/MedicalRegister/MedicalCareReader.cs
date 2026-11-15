@@ -7,8 +7,6 @@ using MedTools.Settlements.Core.Enums;
 
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
-
-using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
 using MedTools.Settlements.Application.Common.Exceptions;
@@ -16,7 +14,7 @@ using MedTools.Settlements.Application.Common.Exceptions;
 namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 public class MedicalCareReader(
-     MedToolsSettlementsDbContextFactory dbContextFactory,
+    MedicalRegisterDbContextResolver dbContextResolver,
     IMapper mapper) : IMedicalCareReader
 {
     public async Task<IReadOnlyCollection<PrescriptionDto>> GetPrescriptionsAsync(
@@ -24,7 +22,7 @@ public class MedicalCareReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionPrescription>()
             .FromSqlRaw(
@@ -41,7 +39,7 @@ public class MedicalCareReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionReferral>()
             .FromSqlRaw(
@@ -58,7 +56,7 @@ public class MedicalCareReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionClinicalGroup>()
             .FromSqlRaw(
@@ -79,7 +77,7 @@ public class MedicalCareReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionHighTechMedicalCare>()
             .FromSqlRaw(
@@ -98,7 +96,7 @@ public class MedicalCareReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionClassificationCriterion>()
             .FromSqlRaw(
@@ -115,7 +113,7 @@ public class MedicalCareReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionTreatmentComplexityCoefficient>()
             .FromSqlRaw(

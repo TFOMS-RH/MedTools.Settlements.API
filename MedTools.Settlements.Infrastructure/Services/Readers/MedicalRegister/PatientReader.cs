@@ -8,8 +8,6 @@ using MedTools.Settlements.Core.Enums;
 using MedTools.Settlements.Application.Common.Exceptions;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
-
-using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
 
@@ -17,7 +15,7 @@ namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 public sealed class PatientReader(
 
-    MedToolsSettlementsDbContextFactory dbContextFactory,
+    MedicalRegisterDbContextResolver dbContextResolver,
     IMapper mapper) : IPatientReader
 {
     public async Task<PatientDto> GetPatientAsync(
@@ -25,7 +23,7 @@ public sealed class PatientReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionPatient>()
             .FromSqlRaw(
@@ -46,7 +44,7 @@ public sealed class PatientReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionInsurance>()
             .FromSqlRaw(

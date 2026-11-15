@@ -9,8 +9,6 @@ using MedTools.Settlements.Application.Models.Params;
 using MedTools.Settlements.Application.Models.Results;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
-
-using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
 using MedTools.Settlements.Application.Common.Exceptions;
@@ -18,14 +16,14 @@ using MedTools.Settlements.Application.Common.Exceptions;
 namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 public sealed class CompletedCaseReader(
-    MedToolsSettlementsDbContextFactory dbContextFactory,
+    MedicalRegisterDbContextResolver dbContextResolver,
     IMapper mapper) : ICompletedCaseReader
 {
     public async Task<PagedResult<CompletedCaseDto>> GetCompletedCasesAsync(
         GetCompletedCasesByMedicalInvoiceUidParams @params,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(@params.RegisterType);
+        var dbContext = dbContextResolver.GetDbContext(@params.RegisterType);
 
         var recordsCount = new SqlParameter(
             "@pTotalRecords",
@@ -58,7 +56,7 @@ public sealed class CompletedCaseReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionCompletedCaseDetails>()
             .FromSqlRaw(

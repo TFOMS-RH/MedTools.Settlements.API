@@ -7,8 +7,6 @@ using MedTools.Settlements.Core.Enums;
 
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
-
-using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
 
@@ -16,7 +14,7 @@ namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 public sealed class MedicalServiceReader(
 
-    MedToolsSettlementsDbContextFactory dbContextFactory,
+    MedicalRegisterDbContextResolver dbContextResolver,
     IMapper mapper) : IMedicalServiceReader
 {
     public async Task<IReadOnlyCollection<ProvidedServiceDto>> GetProvidedServicesAsync(
@@ -24,7 +22,7 @@ public sealed class MedicalServiceReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionProvidedService>()
             .FromSqlRaw(
@@ -41,7 +39,7 @@ public sealed class MedicalServiceReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionMedicalDevice>()
             .FromSqlRaw(

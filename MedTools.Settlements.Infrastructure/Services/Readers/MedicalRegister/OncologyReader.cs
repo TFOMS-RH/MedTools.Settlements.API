@@ -8,8 +8,6 @@ using MedTools.Settlements.Core.Enums;
 using MedTools.Settlements.Application.Common.Exceptions;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
-
-using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
 
@@ -17,7 +15,7 @@ namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 public sealed class OncologyReader(
 
-    MedToolsSettlementsDbContextFactory dbContextFactory,
+    MedicalRegisterDbContextResolver dbContextResolver,
     IMapper mapper) : IOncologyReader
 {
     public async Task<OncologyCaseDto> GetOncologyCaseAsync(
@@ -25,7 +23,7 @@ public sealed class OncologyReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionOncologyCase>()
             .FromSqlRaw(
@@ -46,7 +44,7 @@ public sealed class OncologyReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionConsultation>()
             .FromSqlRaw(
@@ -63,7 +61,7 @@ public sealed class OncologyReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionDiagnostic>()
             .FromSqlRaw(
@@ -79,7 +77,7 @@ public sealed class OncologyReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionContraindication>()
             .FromSqlRaw(
@@ -95,7 +93,7 @@ public sealed class OncologyReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionOncologyService>()
             .FromSqlRaw(
@@ -111,7 +109,7 @@ public sealed class OncologyReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionMedication>()
             .FromSqlRaw(
@@ -127,7 +125,7 @@ public sealed class OncologyReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionInjectionDate>()
             .FromSqlRaw(
@@ -143,7 +141,7 @@ public sealed class OncologyReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var result = await dbContext.Set<ProjectionInjection>()
             .FromSqlRaw(

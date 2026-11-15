@@ -4,23 +4,21 @@ using MedTools.Settlements.Core.Enums;
 
 using MedTools.Settlements.Application.Models.Params;
 using MedTools.Settlements.Application.Models.Results;
+using MedTools.Settlements.Application.Common.Exceptions;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
-
-using MedTools.Settlements.Infrastructure.Services.Factories;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Elements;
-using MedTools.Settlements.Application.Common.Exceptions;
 
 namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 public sealed class MedicalInvoiceReader(
-    MedToolsSettlementsDbContextFactory dbContextFactory) : IMedicalInvoiceReader
+    MedicalRegisterDbContextResolver dbContextResolver) : IMedicalInvoiceReader
 {
     public async Task<PagedResult<MedicalInvoiceDto>> GetMedicalInvoicesPagedResultAsync(
         GetMedicalInvoiceParams @params,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(@params.RegisterType);
+        var dbContext = dbContextResolver.GetDbContext(@params.RegisterType);
 
         var baseQuery = dbContext.Set<MedicalInvoiceDbEntity>()
             .Where(x => x.MedicalOrganizationCode == @params.MCode
@@ -61,7 +59,7 @@ public sealed class MedicalInvoiceReader(
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextFactory.CreateDbContext(registerType);
+        var dbContext = dbContextResolver.GetDbContext(registerType);
 
         var medicalInvoiceDetails = await dbContext.Set<MedicalInvoiceDbEntity>()
             .AsNoTracking()
