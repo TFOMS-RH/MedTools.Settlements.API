@@ -1,4 +1,4 @@
-﻿using MedTools.Settlements.Web.Endpoints.Handlers.InterterritorialSettlements;
+﻿using MedTools.Settlements.Web.Endpoints.Handlers.Acts;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups.InterterritorialSettlements;
 

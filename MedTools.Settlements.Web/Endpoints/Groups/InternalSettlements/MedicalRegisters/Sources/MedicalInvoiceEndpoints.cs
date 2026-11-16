@@ -1,4 +1,4 @@
-﻿using MedTools.Settlements.Web.Endpoints.Handlers.InternalSettlements.MedicalRegisterGroup.MedicalInvoices;
+﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.MedicalInvoices;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlements.MedicalRegisters.Sources;
 
@@ -10,7 +10,6 @@ public static class MedicalInvoiceEndpoints
         var group = builder
             .MapGroup("/medical-invoices")
             .WithTags("Medtical Invoices");
-
 
         group.MapGet(
                 pattern: "/",

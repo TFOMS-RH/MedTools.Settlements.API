@@ -3,7 +3,7 @@
 public sealed class StoredProcedureSql
 {
     public const string GetCompletedCasesByMedicalInvoiceUid = """
-        EXEC mt_get_extended_completed_cases 
+        EXEC mt_medical_register_get_extended_completed_cases 
             @pMedicalInvoiceUid, 
             @pSkip, 
             @pTake, 
@@ -47,7 +47,7 @@ public sealed class StoredProcedureSql
         """;
 
     public const string GetDiagnostics = """
-        EXEC mt_medical_register_get_diagnostics_records
+        EXEC mt_medical_register_get_diagnostics
             @pOncologyCaseUid
         """;
 
