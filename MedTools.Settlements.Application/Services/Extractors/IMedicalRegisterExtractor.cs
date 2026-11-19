@@ -10,6 +10,7 @@ public interface IMedicalRegisterExtractor
         CancellationToken cancellationToken);
 
     public Task<IReadOnlyCollection<BillingPeriodDto>> ExtractBillingPeriodsAsync(
+        string medicalOrganizationCode,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken);
 

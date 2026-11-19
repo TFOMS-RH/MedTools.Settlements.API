@@ -32,6 +32,7 @@ public sealed class MedicalRegisterExtractor(
     }
 
     public async Task<IReadOnlyCollection<BillingPeriodDto>> ExtractBillingPeriodsAsync(
+        string medicalOrganizationCode,
         MedicalRegisterType registerType,
         CancellationToken cancellationToken)
     {
@@ -39,6 +40,7 @@ public sealed class MedicalRegisterExtractor(
 
         var flatPeriods = await dbContext.Set<MedicalInvoiceDbEntity>()
             .AsNoTracking()
+            .Where(x => x.MedicalOrganizationCode == medicalOrganizationCode)
             .Select(x => new
             {
                 Year = x.BillingYear,

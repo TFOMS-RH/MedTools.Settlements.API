@@ -7,6 +7,7 @@ namespace MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.Extractio
 public static class ExtractUniqueBillingPeriodsCommand
 {
     public static async Task<IResult> ExecuteAsync(
+        string medicalOrganizationCode,
         MedicalRegisterType registerType,
         IMedicalRegisterExtractor extractor,
         CancellationToken cancellationToken)
@@ -27,6 +28,7 @@ public static class ExtractUniqueBillingPeriodsCommand
 
         var billingPeriods = await extractor
             .ExtractBillingPeriodsAsync(
+                medicalOrganizationCode,
                 registerType,
                 cancellationToken);
 
