@@ -1,4 +1,4 @@
-﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.CompletedCases;
+﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.Elements.CompletedCases;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlements.MedicalRegisters.Sources;
 
@@ -19,6 +19,12 @@ public static class CompletedCaseEndpoints
                 pattern: "/{completedCaseUid:int}/medical-cases",
                 handler: GetMedicalCasesByCompletedCaseUidCommand.ExecuteAsync)
             .WithName("GetMedicalCasesByCompletedCaseUid")
+            .WithDescription("");
+
+        group.MapPost(
+                pattern: "/",
+                handler: GetFilteredCompletedCasesCommand.ExecuteAsync)
+            .WithName("GetFilteredCompletedCases")
             .WithDescription("");
 
         return builder;

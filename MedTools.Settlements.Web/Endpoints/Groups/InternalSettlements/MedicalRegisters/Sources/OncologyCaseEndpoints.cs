@@ -1,4 +1,4 @@
-﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.OncologyCases;
+﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.Elements.OncologyCases;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlements.MedicalRegisters.Sources;
 

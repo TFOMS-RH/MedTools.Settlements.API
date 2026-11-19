@@ -10,6 +10,8 @@ using MedTools.Settlements.Application.Models.Results;
 using MedTools.Settlements.Application.Common.Exceptions;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
+
+using MedTools.Settlements.Infrastructure.Services.Builders;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
 
@@ -17,6 +19,7 @@ namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 public sealed class CompletedCaseReader(
     MedicalRegisterDbContextResolver dbContextResolver,
+
     IMapper mapper) : ICompletedCaseReader
 {
     public async Task<PagedResult<CompletedCaseDto>> GetCompletedCasesAsync(
@@ -51,6 +54,43 @@ public sealed class CompletedCaseReader(
 
     }
 
+    public async Task<PagedResult<CompletedCaseDto>> GetFilteredCompletedCasesAsync(
+        GetFilteredCompletedCasesParams @params,
+        CancellationToken cancellationToken)
+    {
+        var dbContext = dbContextResolver.GetDbContext(@params.RegisterType);
+
+        var filterQuery = FilteredMedicalRegisterQueryBuilder.Build(
+            @params.Filters,
+            dbContext);
+
+        var totalRecords = await filterQuery.CountAsync(cancellationToken);
+
+        var records = await filterQuery
+            .OrderBy(x => x.CompletedCase.Uid)
+            .Skip(@params.PageSize * (@params.Page - 1))
+            .Take(@params.PageSize)
+            .Select(x => new CompletedCaseDto(
+                CompletedCaseUid: x.CompletedCase.Uid,
+                EntryNumber: x.CompletedCase.CaseRecordNumber,
+                AmountBilled: x.CompletedCase.BilledAmount,
+                ApprovedAmount: x.CompletedCase.ApprovedAmount,
+                InsuranceCompanyApprovedAmount: x.CompletedCase.InsuranceCompanyApprovedAmount,
+                MedicalCareConditionsCode: x.CompletedCase.CareCondition,
+                MedicalCareConditionsName: "",
+                PatientLastName: x.Person.PatientLastName,
+                PatientFirstName: x.Person.PatientFirstName,
+                PatientMiddleName: x.Person.PatientMiddleName,
+                InsurancePolicySeries: x.CompletedCase.MedicalRecord.Patient.InsurancePolicySeries,
+                InsurancePolicyNumber: x.CompletedCase.MedicalRecord.Patient.InsurancePolicyNumber,
+                EntryPositionNumber: x.CompletedCase.MedicalRecord.RecordSequenceNumber))
+            .ToListAsync(cancellationToken);
+
+        return new PagedResult<CompletedCaseDto>(
+            Values: records,
+            TotalRecords: totalRecords);
+    }
+
     public async Task<CompletedCaseDetailsDto> GetCompletedCaseAsync(
         int completedCaseUid,
         MedicalRegisterType registerType,
@@ -72,4 +112,6 @@ public sealed class CompletedCaseReader(
 
         return mapper.Map<CompletedCaseDetailsDto>(completedCase);
     }
+
+
 }

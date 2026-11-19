@@ -1,18 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using MedTools.Settlements.Application.Services;
+using MedTools.Settlements.Application.Services.Extractors;
 using MedTools.Settlements.Application.Models.XML.ReconciliationAct;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
 using MedTools.Settlements.Infrastructure.Services;
 using MedTools.Settlements.Infrastructure.Common.Options;
+using MedTools.Settlements.Infrastructure.Services.Extractors;
 using MedTools.Settlements.Infrastructure.Services.Repositories;
+using MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 using MedTools.Settlements.Infrastructure.Database.InternalSettlements.Contexts;
 using MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Contexts;
-using MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 using Incoming = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Incoming;
 using Outgoing = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Outgoing;
@@ -31,6 +33,7 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
         RegisterRepositories(services);
         RegisterInternalServices(services);
         RegisterReaders(services);
+        RegisterExtractors(services);
 
         return services;
     }
@@ -107,6 +110,11 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
         services.AddScoped<IPatientReader, PatientReader>();
     }
 
+    private static void RegisterExtractors(IServiceCollection services)
+    {
+        services.AddScoped<IMedicalRegisterExtractor, MedicalRegisterExtractor>();
+    }
+
     private static void RegisterMappers(IServiceCollection services)
     {
         services.AddAutoMapper(config => { },
@@ -121,9 +129,9 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
 
     private static void RegisterInternalServices(IServiceCollection services)
     {
-        services.AddSingleton<IXmlDeserializationService<ReconciliationActFileRoot>, ReconciliationActXmlDeserializationService>();
         services.AddSingleton<XmlSchemaProvider>();
         services.AddSingleton<IXmlFileValidationService, XmlFileValidationService>();
+        services.AddSingleton<IXmlDeserializationService<ReconciliationActFileRoot>, ReconciliationActXmlDeserializationService>();
 
         services.AddScoped<IActsImportService, ActsImportService>();
         services.AddScoped<MedicalRegisterDbContextResolver>();

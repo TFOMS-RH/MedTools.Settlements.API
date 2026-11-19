@@ -1,4 +1,4 @@
-﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.MedicalCases;
+﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.Elements.MedicalCases;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlements.MedicalRegisters.Sources;
 

@@ -12,6 +12,10 @@ public interface ICompletedCaseReader
         GetCompletedCasesByMedicalInvoiceUidParams @params,
         CancellationToken cancellationToken);
 
+    public Task<PagedResult<CompletedCaseDto>> GetFilteredCompletedCasesAsync(
+        GetFilteredCompletedCasesParams @params,
+        CancellationToken cancellationToken);
+         
     public Task<CompletedCaseDetailsDto> GetCompletedCaseAsync(
         int completedCaseUid,
         MedicalRegisterType registerType,

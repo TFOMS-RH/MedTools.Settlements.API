@@ -1,4 +1,4 @@
-﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.ProvidedServices;
+﻿using MedTools.Settlements.Web.Endpoints.Handlers.MedicalRegisters.Elements.ProvidedServices;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlements.MedicalRegisters.Sources;
 

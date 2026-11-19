@@ -1,4 +1,5 @@
 ﻿using MedTools.Settlements.Web.Endpoints.Groups.InternalSettlements.MedicalRegisters.Sources;
+using MedTools.Settlements.Web.Endpoints.Groups.InternalSettlements.MedicalRegisters.Extraction;
 
 namespace MedTools.Settlements.Web.Endpoints.Groups.InternalSettlements.MedicalRegisters;
 
@@ -19,6 +20,7 @@ public static class MedicalRegisterEndpoints
         group.MapMedicationEndpoints();
         group.MapClinicalGroupEndpoints();
         group.MapProvidedServiceEndpoints();
+        group.MapMedicalRegisterExtractionEndpoints();
 
         return group;
     }
