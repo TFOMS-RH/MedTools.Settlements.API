@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using MedTools.Settlements.Application.Models.Filters.MedicalRegister;
-
-using MedTools.Settlements.Infrastructure.Common;
+using MedTools.Settlements.Infrastructure.Common.Models;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Proxy;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Elements;
+using MedTools.Settlements.Infrastructure.Common.Extensions;
 
 namespace MedTools.Settlements.Infrastructure.Services.Builders;
 
@@ -13,6 +13,7 @@ public sealed class FilteredMedicalRegisterQueryBuilder
 {
     public static IQueryable<CompletedCasePersonJoin> Build(
         MedicalRegisterAppliedFilters appliedFilters,
+        ResolvedMedicalRegisterFilters resolvedFilters,
         MedicalRegisterDbContextBase dbContextBase)
     {
         var query = dbContextBase.Set<CompletedCaseDbEntity>()
@@ -49,12 +50,12 @@ public sealed class FilteredMedicalRegisterQueryBuilder
 
         query = query.BuildWithPersonFilters(appliedFilters.Person);
         query = query.BuildWithMedicalCaseDetailsFilters(appliedFilters.MedicalCaseDetails);
-        query = query.BuildWithOncologyFilters(appliedFilters.Oncology);
+        query = query.BuildWithOncologyFilters(appliedFilters.Oncology, resolvedFilters);
         query = query.BuildWithPrescriptionFilters(appliedFilters.Prescription);
         query = query.BuildWithClinicalGroupFilters(appliedFilters.ClinicalGroup);
         query = query.BuildWithProvidedServiceFilters(appliedFilters.ProvidedService);
         query = query.BuildWithSanctionFilters(appliedFilters.Sanction);
-        query = query.BuildWithDiseaseFilters(appliedFilters.Diseases);
+        query = query.BuildWithDiseaseFilters(appliedFilters.Diseases, resolvedFilters);
         query = query.BuildWithInternalFilters(appliedFilters.InternalService);
 
         return query;

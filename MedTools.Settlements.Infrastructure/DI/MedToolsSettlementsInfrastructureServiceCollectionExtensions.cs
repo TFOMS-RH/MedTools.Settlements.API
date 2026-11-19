@@ -18,6 +18,8 @@ using MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.C
 
 using Incoming = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Incoming;
 using Outgoing = MedTools.Settlements.Infrastructure.Database.InterterritorialSettlements.Acts.Reconciliation.Outgoing;
+using MedTools.Settlements.Infrastructure.Database.References;
+using MedTools.Settlements.Infrastructure.Services.Helpers;
 
 namespace MedTools.Settlements.Infrastructure.DI;
 
@@ -54,7 +56,8 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
             .ValidateOnStart();
     }
 
-    private static void RegisterDbContexts(IServiceCollection services)
+    private static void RegisterDbContexts(
+        IServiceCollection services)
     {
         services.AddDbContext<InterterritorialSettlementDbContext>(
             (sp, dbContextOptionsBuilder) =>
@@ -96,9 +99,23 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
                     });
 
             });
+
+        services.AddDbContext<ReferenceDataDbContext>(
+            (sp, dbContextOptionsBuilder) =>
+            {
+                var databaseOptions = sp.GetRequiredService<IOptions<DatabaseOption>>().Value;
+
+                dbContextOptionsBuilder.UseSqlServer(
+                    connectionString: databaseOptions.MEDSPR18.ConnectionString,
+                    (sqlServerOptionsBuilder) =>
+                    {
+                        sqlServerOptionsBuilder.CommandTimeout(databaseOptions.MEDSPR18.Timeout);
+                    });
+            });
     }
 
-    private static void RegisterReaders(IServiceCollection services)
+    private static void RegisterReaders(
+        IServiceCollection services)
     {
         services.AddScoped<ICompletedCaseReader, CompletedCaseReader>();
         services.AddScoped<IMedicalCareReader, MedicalCareReader>();
@@ -110,24 +127,29 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
         services.AddScoped<IPatientReader, PatientReader>();
     }
 
-    private static void RegisterExtractors(IServiceCollection services)
+    private static void RegisterExtractors(
+        IServiceCollection services)
     {
         services.AddScoped<IMedicalRegisterExtractor, MedicalRegisterExtractor>();
+        services.AddScoped<ReferenceDataExtractor>();
     }
 
-    private static void RegisterMappers(IServiceCollection services)
+    private static void RegisterMappers(
+        IServiceCollection services)
     {
         services.AddAutoMapper(config => { },
             typeof(Incoming.Mapping.ReconciliationActFileRootMappingProfile).Assembly,
             typeof(Outgoing.Mapping.ReconciliationActFileRootMappingProfile).Assembly);
     }
 
-    private static void RegisterRepositories(IServiceCollection services)
+    private static void RegisterRepositories(
+        IServiceCollection services)
     {
         services.AddScoped<ReconciliationActRepository>();
     }
 
-    private static void RegisterInternalServices(IServiceCollection services)
+    private static void RegisterInternalServices(
+        IServiceCollection services)
     {
         services.AddSingleton<XmlSchemaProvider>();
         services.AddSingleton<IXmlFileValidationService, XmlFileValidationService>();
@@ -135,5 +157,6 @@ public static class MedToolsSettlementsInfrastructureServiceCollectionExtensions
 
         services.AddScoped<IActsImportService, ActsImportService>();
         services.AddScoped<MedicalRegisterDbContextResolver>();
+        services.AddScoped<MedicalRegisterFilterResolver>();
     }
 }

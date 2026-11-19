@@ -7,7 +7,7 @@ public sealed record CompletedCaseDto(
     decimal? ApprovedAmount,
     decimal? InsuranceCompanyApprovedAmount,
     int MedicalCareConditionsCode,
-    string MedicalCareConditionsName,
+    string? MedicalCareConditionsName,
     string PatientLastName,
     string PatientFirstName,
     string PatientMiddleName,

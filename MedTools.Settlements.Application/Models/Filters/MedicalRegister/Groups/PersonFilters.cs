@@ -1,4 +1,6 @@
-﻿namespace MedTools.Settlements.Application.Models.Filters.MedicalRegister.Groups;
+﻿using MedTools.Settlements.Core.Enums;
+
+namespace MedTools.Settlements.Application.Models.Filters.MedicalRegister.Groups;
 
 public sealed record PersonFilters(
     PatientFilters Patient,
@@ -9,14 +11,14 @@ public sealed record PatientFilters(
     string FirstName,
     string LastName,
     string MiddleName,
-    string Sex,
+    Sex? Sex,
     DateTime? BirthDate);
 
 public sealed record RepresentativeFilters(
     string FirstName,
     string LastName,
     string MiddleName,
-    string Sex,
+    Sex? Sex,
     DateTime? BirthDate);
 
 public sealed record InsuranceFilters(

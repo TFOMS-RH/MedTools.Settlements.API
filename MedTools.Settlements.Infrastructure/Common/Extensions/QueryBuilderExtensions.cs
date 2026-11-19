@@ -1,7 +1,8 @@
 ﻿using MedTools.Settlements.Application.Models.Filters.MedicalRegister.Groups;
+using MedTools.Settlements.Infrastructure.Common.Models;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Proxy;
 
-namespace MedTools.Settlements.Infrastructure.Common;
+namespace MedTools.Settlements.Infrastructure.Common.Extensions;
 
 public static class QueryBuilderExtensions
 {
@@ -36,6 +37,14 @@ public static class QueryBuilderExtensions
                 x => x.Person.PatientBirthDate == filters.Patient.BirthDate);
         }
 
+        if (filters.Patient.Sex is Core.Enums.Sex patientSex)
+        {
+            var sexValue = (byte)patientSex;
+
+            query = query.Where(
+                x => x.Person.PatientSex == sexValue);
+        }
+
         if (!string.IsNullOrWhiteSpace(filters.Representative.FirstName))
         {
             query = query.Where(
@@ -64,6 +73,14 @@ public static class QueryBuilderExtensions
         {
             query = query.Where(
                 x => x.Person.PatientRepresentativeBirthday == filters.Representative.BirthDate);
+        }
+
+        if (filters.Representative.Sex is Core.Enums.Sex representativeSex)
+        {
+            var sexValue = (byte)representativeSex;
+
+            query = query.Where(
+                x => x.Person.PatientRepresentativeSex == sexValue);
         }
 
         if (filters.Insurance.Insurances.Count > 0)
@@ -277,8 +294,18 @@ public static class QueryBuilderExtensions
 
     public static IQueryable<CompletedCasePersonJoin> BuildWithOncologyFilters(
         this IQueryable<CompletedCasePersonJoin> query,
-        OncologyFilters filters)
+        OncologyFilters filters,
+        ResolvedMedicalRegisterFilters resolvedFilters)
     {
+        if (filters.OncologyCase.Stages.Count > 0)
+        {
+            query = query.Where(
+                x => x.CompletedCase.MedicalCases.Any(
+                    medicalCase => medicalCase.OncologyCase.Stage.HasValue &&
+                    resolvedFilters.DiseaseStageKeys.Contains(
+                        medicalCase.OncologyCase.Stage.Value)));
+        }
+
         if (filters.OncologyCase.ReferralReasons.Count > 0)
         {
             query = query.Where(
@@ -325,6 +352,16 @@ public static class QueryBuilderExtensions
                         oncologyService => oncologyService.DrugTherapyCycleCode.HasValue
                         && filters.OncologyService.DrugTherapyCycles.Contains(
                             oncologyService.DrugTherapyCycleCode.Value))));
+        }
+
+        if (filters.OncologyService.DrugTherapyLines.Count > 0)
+        {
+            query = query.Where(
+                x => x.CompletedCase.MedicalCases.Any(
+                    medicalCase => medicalCase.OncologyCase.OncologyServices.Any(
+                        oncologyService => oncologyService.DrugTherapyLineCode.HasValue &&
+                        filters.OncologyService.DrugTherapyLines
+                            .Contains(oncologyService.DrugTherapyLineCode.Value))));
         }
 
 
@@ -491,7 +528,7 @@ public static class QueryBuilderExtensions
             query = query.Where(
                 x => x.CompletedCase.MedicalCases.Any(
                     medicalCase => medicalCase.ClinicalGroup.TreatmentComplexityCoefficients.Any(
-                        coefficient => coefficient.ComplexityCoefficientNumber != null && 
+                        coefficient => coefficient.ComplexityCoefficientNumber != null &&
                         filters.BaseClinicalGroup.ComplexityCoefficientNumbers
                             .Contains(coefficient.ComplexityCoefficientNumber))));
         }
@@ -500,7 +537,7 @@ public static class QueryBuilderExtensions
         {
             query = query.Where(
                 x => x.CompletedCase.MedicalCases.Any(
-                    medicalCase => medicalCase.ClinicalGroup.InterruptedCasePaymentReason != null && 
+                    medicalCase => medicalCase.ClinicalGroup.InterruptedCasePaymentReason != null &&
                     filters.BaseClinicalGroup.InterruptedCasePaymentReasons
                         .Contains(medicalCase.ClinicalGroup.InterruptedCasePaymentReason)));
         }
@@ -510,7 +547,7 @@ public static class QueryBuilderExtensions
         {
             query = query.Where(
                 x => x.CompletedCase.MedicalCases.Any(
-                    medicalCase => medicalCase.HighTechCareType != null && 
+                    medicalCase => medicalCase.HighTechCareType != null &&
                     filters.HighTechMedicalCare.HighTechCareTypes
                         .Contains(medicalCase.HighTechCareType)));
         }
@@ -519,7 +556,7 @@ public static class QueryBuilderExtensions
         {
             query = query.Where(
                 x => x.CompletedCase.MedicalCases.Any(
-                    medicalCase => medicalCase.HighTechCareMethod != null && 
+                    medicalCase => medicalCase.HighTechCareMethod != null &&
                     filters.HighTechMedicalCare.HighTechCareMethods
                         .Contains(medicalCase.HighTechCareMethod)));
         }
@@ -535,7 +572,7 @@ public static class QueryBuilderExtensions
         {
             query = query.Where(
                 x => x.CompletedCase.MedicalCases.Any(
-                    medicalCase => medicalCase.VoucherNumber != null && 
+                    medicalCase => medicalCase.VoucherNumber != null &&
                     medicalCase.VoucherNumber == filters.HighTechMedicalCare.VoucherNumber));
         }
 
@@ -608,19 +645,37 @@ public static class QueryBuilderExtensions
 
     public static IQueryable<CompletedCasePersonJoin> BuildWithDiseaseFilters(
         this IQueryable<CompletedCasePersonJoin> query,
-        DiseaseFilters filters)
+        DiseaseFilters filters,
+        ResolvedMedicalRegisterFilters resolvedFilters)
     {
+        if (filters.BaseDisease.DiagnosisClasses.Count > 0)
+        {
+            query = query.Where(
+                x => x.CompletedCase.MedicalCases.Any(
+                    medicalCase => resolvedFilters.DiseasesByClassUids
+                        .Contains(medicalCase.PrimaryDiagnosis)));
+        }
+
+        if (filters.BaseDisease.DiagnosisSubClasses.Count > 0)
+        {
+            query = query.Where(
+                x => x.CompletedCase.MedicalCases.Any(
+                    medicalCase => resolvedFilters.DiseasesBySubClassUids
+                        .Contains(medicalCase.PrimaryDiagnosis)));
+        }
+
         if (filters.BaseDisease.PrimaryDiagnoses.Count > 0)
         {
-            query = query.Where(x => x.CompletedCase.MedicalCases.Any(
-                medicalCase => filters.BaseDisease.PrimaryDiagnoses
-                    .Contains(medicalCase.PrimaryDiagnosis)));
+            query = query.Where(
+                x => x.CompletedCase.MedicalCases.Any(
+                    medicalCase => filters.BaseDisease.PrimaryDiagnoses
+                        .Contains(medicalCase.PrimaryDiagnosis)));
         }
 
         if (filters.AdditionalDisease.InitialDiagnoses.Count > 0)
         {
             query = query.Where(x => x.CompletedCase.MedicalCases.Any(
-                medicalCase => medicalCase.InitialDiagnosis != null && 
+                medicalCase => medicalCase.InitialDiagnosis != null &&
                 filters.AdditionalDisease.InitialDiagnoses
                     .Contains(medicalCase.InitialDiagnosis)));
         }
@@ -648,14 +703,14 @@ public static class QueryBuilderExtensions
         this IQueryable<CompletedCasePersonJoin> query,
         InternalServiceFilters filters)
     {
-        if (!string.IsNullOrWhiteSpace(filters.PatientUid) && 
+        if (!string.IsNullOrWhiteSpace(filters.PatientUid) &&
             Int32.TryParse(filters.PatientUid, out int patientUid))
         {
             query = query.Where(
                 x => x.CompletedCase.MedicalRecord.Patient.Uid == patientUid);
         }
 
-        if (!string.IsNullOrWhiteSpace(filters.MedicalCaseUid) && 
+        if (!string.IsNullOrWhiteSpace(filters.MedicalCaseUid) &&
             Int32.TryParse(filters.MedicalCaseUid, out int medicalCaseUid))
         {
             query = query.Where(
@@ -663,14 +718,14 @@ public static class QueryBuilderExtensions
                     medicalCase => medicalCase.Uid == medicalCaseUid));
         }
 
-        if (!string.IsNullOrWhiteSpace(filters.CompletedCaseUid) && 
+        if (!string.IsNullOrWhiteSpace(filters.CompletedCaseUid) &&
             Int32.TryParse(filters.CompletedCaseUid, out int completedCaseUid))
         {
             query = query.Where(
                 x => x.CompletedCase.Uid == completedCaseUid);
         }
 
-        if (!string.IsNullOrWhiteSpace(filters.InvoiceUid) && 
+        if (!string.IsNullOrWhiteSpace(filters.InvoiceUid) &&
             Int32.TryParse(filters.InvoiceUid, out int invoiceUid))
         {
             query = query.Where(
@@ -683,14 +738,14 @@ public static class QueryBuilderExtensions
                 x => x.CompletedCase.MedicalRecord.MedicalRegistry.Invoice.InvoiceNumber == filters.InvoiceNumber);
         }
 
-        if (!string.IsNullOrEmpty(filters.InvoiceBillingMonth) && 
+        if (!string.IsNullOrEmpty(filters.InvoiceBillingMonth) &&
             Byte.TryParse(filters.InvoiceBillingMonth, out var billingMonth))
         {
             query = query.Where(
                 x => x.CompletedCase.MedicalRecord.MedicalRegistry.Invoice.BillingMonth == billingMonth);
         }
 
-        if (!string.IsNullOrWhiteSpace(filters.InvoiceBillingYear) && 
+        if (!string.IsNullOrWhiteSpace(filters.InvoiceBillingYear) &&
             Int32.TryParse(filters.InvoiceBillingYear, out int billingYear))
         {
             query = query.Where(

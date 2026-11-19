@@ -11,6 +11,7 @@ using MedTools.Settlements.Application.Common.Exceptions;
 using MedTools.Settlements.Application.Models.Dtos.MedicalRegister;
 using MedTools.Settlements.Application.Services.Readers.MedicalRegister;
 
+using MedTools.Settlements.Infrastructure.Services.Helpers;
 using MedTools.Settlements.Infrastructure.Services.Builders;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Constants;
 using MedTools.Settlements.Infrastructure.Database.Common.MedicalRegister.Models.Projections;
@@ -19,7 +20,7 @@ namespace MedTools.Settlements.Infrastructure.Services.Readers.MedicalRegister;
 
 public sealed class CompletedCaseReader(
     MedicalRegisterDbContextResolver dbContextResolver,
-
+    MedicalRegisterFilterResolver filterResolver,
     IMapper mapper) : ICompletedCaseReader
 {
     public async Task<PagedResult<CompletedCaseDto>> GetCompletedCasesAsync(
@@ -58,13 +59,20 @@ public sealed class CompletedCaseReader(
         GetFilteredCompletedCasesParams @params,
         CancellationToken cancellationToken)
     {
-        var dbContext = dbContextResolver.GetDbContext(@params.RegisterType);
+        var dbContext = dbContextResolver.GetDbContext(
+            @params.RegisterType);
+
+        var resolvedFilterKeys = await filterResolver.ResolveAsync(
+            @params.Filters,
+            cancellationToken);
 
         var filterQuery = FilteredMedicalRegisterQueryBuilder.Build(
             @params.Filters,
+            resolvedFilterKeys,
             dbContext);
 
-        var totalRecords = await filterQuery.CountAsync(cancellationToken);
+        var totalRecords = await filterQuery.CountAsync(
+            cancellationToken);
 
         var records = await filterQuery
             .OrderBy(x => x.CompletedCase.Uid)
@@ -77,7 +85,7 @@ public sealed class CompletedCaseReader(
                 ApprovedAmount: x.CompletedCase.ApprovedAmount,
                 InsuranceCompanyApprovedAmount: x.CompletedCase.InsuranceCompanyApprovedAmount,
                 MedicalCareConditionsCode: x.CompletedCase.CareCondition,
-                MedicalCareConditionsName: "",
+                MedicalCareConditionsName: null,
                 PatientLastName: x.Person.PatientLastName,
                 PatientFirstName: x.Person.PatientFirstName,
                 PatientMiddleName: x.Person.PatientMiddleName,
@@ -112,6 +120,5 @@ public sealed class CompletedCaseReader(
 
         return mapper.Map<CompletedCaseDetailsDto>(completedCase);
     }
-
 
 }

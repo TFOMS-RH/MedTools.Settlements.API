@@ -7,6 +7,7 @@ public sealed class DatabaseOption
     public DatabaseDetails MTR { get; set; } = new();
     public DatabaseDetails SMODB18 { get; set; } = new();
     public DatabaseDetails INOGOROD18 { get; set; } = new();
+    public DatabaseDetails MEDSPR18 { get; set; } = new();
 }
 
 public sealed class DatabaseDetails

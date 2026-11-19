@@ -14,7 +14,7 @@ public sealed record OncologyServiceFilters(
     List<byte> RadioTherapyTypes,
     List<byte> ServiceTypes,
     List<byte> SurgicalTreatmentTypes,
-    List<string> DrugTherapyLines);
+    List<byte> DrugTherapyLines);
 
 public sealed record MedicationFilters(
     List<string> DrugIdentifiers,
