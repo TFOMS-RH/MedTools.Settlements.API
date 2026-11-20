@@ -80,6 +80,8 @@ public sealed class CompletedCaseReader(
             .Take(@params.PageSize)
             .Select(x => new CompletedCaseDto(
                 CompletedCaseUid: x.CompletedCase.Uid,
+                MedicalOrganizationCode: x.CompletedCase.MedicalOrganizationCode,
+                InsuranceOrganizationCode: x.CompletedCase.MedicalRecord.Patient.InsuranceCompanyCode,
                 EntryNumber: x.CompletedCase.CaseRecordNumber,
                 AmountBilled: x.CompletedCase.BilledAmount,
                 ApprovedAmount: x.CompletedCase.ApprovedAmount,
@@ -91,6 +93,8 @@ public sealed class CompletedCaseReader(
                 PatientMiddleName: x.Person.PatientMiddleName,
                 InsurancePolicySeries: x.CompletedCase.MedicalRecord.Patient.InsurancePolicySeries,
                 InsurancePolicyNumber: x.CompletedCase.MedicalRecord.Patient.InsurancePolicyNumber,
+                TreatmentStartDate: x.CompletedCase.TreatmentStartDate,
+                TreatmentEndDate: x.CompletedCase.TreatmentEndDate,
                 EntryPositionNumber: x.CompletedCase.MedicalRecord.RecordSequenceNumber))
             .ToListAsync(cancellationToken);
 

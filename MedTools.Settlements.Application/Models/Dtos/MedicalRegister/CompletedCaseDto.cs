@@ -2,6 +2,8 @@
 
 public sealed record CompletedCaseDto(
     int CompletedCaseUid,
+    string? MedicalOrganizationCode,
+    string? InsuranceOrganizationCode,
     long EntryNumber,
     decimal AmountBilled,
     decimal? ApprovedAmount,
@@ -13,4 +15,6 @@ public sealed record CompletedCaseDto(
     string PatientMiddleName,
     string? InsurancePolicySeries,
     string InsurancePolicyNumber,
+    DateTime? TreatmentStartDate,
+    DateTime? TreatmentEndDate,
     long EntryPositionNumber);
